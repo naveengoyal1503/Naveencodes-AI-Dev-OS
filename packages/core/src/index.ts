@@ -14,6 +14,17 @@ export interface AppEnv {
   QA_DEFAULT_TARGET_URL: string;
   QA_LOAD_TEST_USERS: number;
   QA_AUTO_FIX_SAFE_MODE: string;
+  FRONTEND_BASE_URL: string;
+  BACKEND_BASE_URL: string;
+  PREVIEW_BASE_DOMAIN: string;
+  PRODUCTION_BASE_DOMAIN: string;
+  VERCEL_TEAM_SLUG: string;
+  GITHUB_REPO_URL: string;
+  GITHUB_DEFAULT_BRANCH: string;
+  PAYMENT_PROVIDER: string;
+  STRIPE_PUBLIC_KEY: string;
+  STRIPE_SECRET_KEY: string;
+  ALERT_WEBHOOK_URL: string;
 }
 
 export interface NavItem {

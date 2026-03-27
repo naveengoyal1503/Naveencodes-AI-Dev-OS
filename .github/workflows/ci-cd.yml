@@ -1,0 +1,46 @@
+name: CI-CD
+
+on:
+  push:
+    branches:
+      - main
+      - "preview/**"
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Typecheck
+        run: npm run typecheck
+
+  deploy-preview:
+    if: github.ref != 'refs/heads/main'
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Preview deployment note
+        run: echo "Hook this job to Vercel preview deployment and backend staging rollout."
+
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Production deployment note
+        run: echo "Hook this job to Vercel production deployment and Node server rollout."

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Bot, SendHorizonal, Sparkles } from "lucide-react";
+import { Bot, Mic, SendHorizonal, Sparkles } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { AppButton } from "../ui/button";
@@ -33,6 +33,29 @@ export function AIChatPanel() {
   const [result, setResult] = useState<ChatResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  const startVoiceCapture = () => {
+    const SpeechRecognitionApi =
+      typeof window !== "undefined"
+        ? ((window as Window & { webkitSpeechRecognition?: new () => { start: () => void; onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null; }; SpeechRecognition?: new () => { start: () => void; onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null; }; }).webkitSpeechRecognition ??
+          (window as Window & { SpeechRecognition?: new () => { start: () => void; onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null; }; }).SpeechRecognition)
+        : undefined;
+
+    if (!SpeechRecognitionApi) {
+      setError("Voice commands are not supported in this browser.");
+      return;
+    }
+
+    const recognition = new SpeechRecognitionApi();
+    recognition.onresult = (event) => {
+      const transcript = event.results[0]?.[0]?.transcript ?? "";
+      if (transcript) {
+        setCommand(transcript);
+        runCommand(transcript);
+      }
+    };
+    recognition.start();
+  };
 
   const runCommand = (nextCommand?: string) => {
     const payload = nextCommand ?? command;
@@ -112,6 +135,10 @@ export function AIChatPanel() {
               <AppButton onClick={() => runCommand()} disabled={isPending} className="w-full justify-center">
                 <SendHorizonal className="mr-2 size-4" />
                 Run workflow
+              </AppButton>
+              <AppButton variant="ghost" onClick={startVoiceCapture} className="w-full justify-center">
+                <Mic className="mr-2 size-4" />
+                Voice command
               </AppButton>
               {error ? <p className="text-sm text-rose-300">{error}</p> : null}
             </div>

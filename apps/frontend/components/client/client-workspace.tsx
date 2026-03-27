@@ -5,6 +5,7 @@ import { useState, useTransition } from "react";
 import { AppButton } from "../ui/button";
 import { SurfaceCard } from "../ui/card";
 import { FieldShell, TextArea, TextInput } from "../ui/form-field";
+import { BillingCenter } from "../ops/billing-center";
 
 const endpoint = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
@@ -192,6 +193,8 @@ export function ClientWorkspace() {
             )}
           </div>
         </SurfaceCard>
+
+        <BillingCenter />
       </div>
     </div>
   );

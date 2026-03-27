@@ -1,4 +1,6 @@
 import { AppShell } from "../../components/shell/app-shell";
+import { BillingCenter } from "../../components/ops/billing-center";
+import { PluginMarketplace } from "../../components/ops/plugin-marketplace";
 import { SurfaceCard } from "../../components/ui/card";
 
 const rows = [
@@ -57,6 +59,24 @@ export default function SettingsPage() {
           </div>
         </SurfaceCard>
       </section>
+
+      <div className="mt-4 space-y-4">
+        <BillingCenter />
+        <PluginMarketplace />
+        <SurfaceCard title="Production security" description="Rate limits, environment variables, and secret management posture.">
+          <div className="grid gap-3 md:grid-cols-3">
+            {[
+              "Global API rate limiting enabled in Fastify.",
+              "Environment variables centralized in backend config parsing.",
+              "Secret keys separated into .env and deployment provider settings."
+            ].map((item) => (
+              <div key={item} className="rounded-2xl border border-black/5 bg-slate-50 px-4 py-4 text-sm dark:border-white/10 dark:bg-slate-950/40">
+                {item}
+              </div>
+            ))}
+          </div>
+        </SurfaceCard>
+      </div>
     </AppShell>
   );
 }

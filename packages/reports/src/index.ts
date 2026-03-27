@@ -1,3 +1,5 @@
+import PDFDocument from "pdfkit";
+
 export interface AuditReport {
   id: string;
   projectId: string;
@@ -61,5 +63,41 @@ export function createQaAuditReport(input: {
         "Restart the project and rerun the QA suite.",
         "Keep monitor mode enabled for regressions."
       ]
+  });
+}
+
+export async function createPdfReportBuffer(report: AuditReport): Promise<Buffer> {
+  const document = new PDFDocument({
+    margin: 48,
+    size: "A4"
+  });
+
+  const chunks: Buffer[] = [];
+
+  return await new Promise<Buffer>((resolve, reject) => {
+    document.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+    document.on("end", () => resolve(Buffer.concat(chunks)));
+    document.on("error", reject);
+
+    document.fontSize(22).text("NaveenCodes AI Dev OS Report");
+    document.moveDown();
+    document.fontSize(12).text(`Report ID: ${report.id}`);
+    document.text(`Project: ${report.projectId}`);
+    document.text(`Type: ${report.type}`);
+    document.text(`Created: ${report.createdAt}`);
+    document.moveDown();
+    document.fontSize(16).text("Summary");
+    document.fontSize(11).text(JSON.stringify(report.summary, null, 2));
+    document.moveDown();
+    document.fontSize(16).text("Errors");
+    if (report.errors.length === 0) {
+      document.fontSize(11).text("No blocking errors.");
+    } else {
+      report.errors.forEach((item) => document.fontSize(11).text(`- ${item}`));
+    }
+    document.moveDown();
+    document.fontSize(16).text("Recommendations");
+    report.recommendations.forEach((item) => document.fontSize(11).text(`- ${item}`));
+    document.end();
   });
 }

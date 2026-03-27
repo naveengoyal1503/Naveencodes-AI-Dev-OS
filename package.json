@@ -16,6 +16,9 @@
     "dev": "concurrently -n frontend,backend -c cyan,magenta \"npm run dev --workspace @naveencodes/frontend\" \"npm run dev --workspace @naveencodes/backend\"",
     "dev:frontend": "npm run dev --workspace @naveencodes/frontend",
     "dev:backend": "npm run dev --workspace @naveencodes/backend",
+    "deploy:preview": "node ./bin/naveencodes-ai.js preview",
+    "deploy:prod": "node ./bin/naveencodes-ai.js deploy",
+    "release": "node ./bin/naveencodes-ai.js release",
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspace @naveencodes/core && npm run typecheck --workspace @naveencodes/ai && npm run typecheck --workspace @naveencodes/mcp && npm run typecheck --workspace @naveencodes/reports && npm run typecheck --workspace @naveencodes/auth && npm run typecheck --workspace @naveencodes/backend && npm run typecheck --workspace @naveencodes/frontend",
     "init": "node ./bin/naveencodes-ai.js init"
@@ -23,6 +26,7 @@
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.1",
+    "@types/pdfkit": "^0.17.3",
     "@types/pg": "^8.15.6",
     "concurrently": "^9.2.1",
     "tsx": "^4.21.0",

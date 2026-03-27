@@ -1,6 +1,6 @@
 # NaveenCodes AI Dev OS
 
-Parts 1, 2, 3, 4, and 5 of an enterprise AI SaaS platform built around browser intelligence, audit orchestration, AI project generation, design automation, realtime QA, premium dashboard UX, advanced intelligence engines, and client operations.
+Parts 1, 2, 3, 4, 5, and 6 of an enterprise AI SaaS platform built around browser intelligence, audit orchestration, AI project generation, design automation, realtime QA, premium dashboard UX, advanced intelligence engines, and deployment-grade SaaS operations.
 
 ## Stack
 
@@ -82,6 +82,18 @@ bin/
 - Dashboard advanced intelligence center for surfacing recommendations, competitor strategy, content ideas, and memory insights
 - Expanded chat suggestions to align with competitor analysis and senior-dev review workflows
 
+## Added In Part 6
+
+- Deployment operations center with preview and production deployment modeling, Git sync hooks, and live URL history
+- CI/CD scaffolding via GitHub Actions, Vercel config, Dockerfiles, and production Docker Compose
+- PDF report generation endpoint for downloadable audit reports
+- SaaS billing workspace with plan catalog, usage stats, checkout session modeling, and client-facing billing access
+- Analytics, notifications, and plugin marketplace APIs plus dashboard surfaces for operational visibility
+- Voice command support in the AI chat panel using browser speech recognition
+- Auto product builder flow for generating deployable blueprints from product prompts
+- Production-ready environment expansion covering domains, repo linkage, payment provider, and alert webhooks
+- Final docs in `docs/SETUP.md`, `docs/API.md`, and `docs/CLI.md`
+
 ## Setup
 
 1. Copy `config/env/.env.example` to `.env`
@@ -102,6 +114,16 @@ npm install
 ```bash
 npm run dev
 ```
+
+## Operations Commands
+
+```bash
+npm run preview
+npm run deploy
+npm run release
+```
+
+These commands map to the local CLI entry in `bin/naveencodes-ai.js` and provide preview, production deployment, and release checklists.
 
 ## MCP Foundation
 
@@ -143,6 +165,36 @@ Part 1 includes the base package that describes the Chrome DevTools MCP command 
 - `GET /api/auth/history`
 - `POST /api/projects`
 
+## Deployment and Ops API Surface
+
+- `GET /api/deployment/overview`
+- `POST /api/deployment/deploy`
+- `POST /api/deployment/preview`
+- `POST /api/deployment/git`
+- `POST /api/deployment/auto-product`
+- `GET /api/billing/plans`
+- `GET /api/billing/usage`
+- `POST /api/billing/checkout`
+- `GET /api/analytics/overview`
+- `GET /api/plugins`
+- `GET /api/notifications`
+- `GET /api/reports`
+- `GET /api/reports/:id/pdf`
+
+## Deployment Files
+
+- `.github/workflows/ci-cd.yml`
+- `vercel.json`
+- `apps/frontend/Dockerfile`
+- `apps/backend/Dockerfile`
+- `config/docker-compose.prod.yml`
+
+## Documentation
+
+- `docs/SETUP.md`
+- `docs/API.md`
+- `docs/CLI.md`
+
 ## Next Prompt Parts
 
-- Later parts layer advanced AI engines, dashboards, SaaS operations, deployment, and ecosystem features
+- Later parts can layer real provider credentials, production deploy targets, and live environment integration on top of this foundation.

@@ -1,5 +1,6 @@
 import { buildLiveMonitorMode, createQaAudit } from "@naveencodes/ai";
 
+import { ReportDownloads } from "../../components/ops/report-downloads";
 import { QAControlCenter } from "../../components/qa/qa-control-center";
 import { AppShell } from "../../components/shell/app-shell";
 
@@ -12,7 +13,10 @@ export default function ReportsPage() {
 
   return (
     <AppShell>
-      <QAControlCenter starterAudit={starterAudit} starterMonitor={starterMonitor} />
+      <div className="space-y-4">
+        <QAControlCenter starterAudit={starterAudit} starterMonitor={starterMonitor} />
+        <ReportDownloads />
+      </div>
     </AppShell>
   );
 }

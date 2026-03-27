@@ -39,12 +39,12 @@ export function ProjectSwitcher() {
   }
 
   return (
-    <label className="hidden items-center gap-3 rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm font-medium text-slate-800 shadow-sm dark:border-white/10 dark:bg-slate-950/70 dark:text-slate-100 xl:inline-flex">
+    <label className="hidden min-w-0 max-w-full items-center gap-3 rounded-full border border-black/10 bg-white/80 px-4 py-2 text-sm font-medium text-slate-800 shadow-sm dark:border-white/10 dark:bg-slate-950/70 dark:text-slate-100 xl:inline-flex">
       <span className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Site</span>
       <select
         value={active}
         onChange={(event) => setActive(event.target.value)}
-        className="bg-transparent text-sm outline-none"
+        className="max-w-[12rem] min-w-0 bg-transparent text-sm outline-none"
       >
         {projects.map((project) => (
           <option key={project.id} value={project.id} className="text-slate-900">

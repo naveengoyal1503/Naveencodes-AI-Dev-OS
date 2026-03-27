@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useEffect, useRef, useState } from "react";
+import { Area, AreaChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
 
 export interface MetricAreaDatum {
   label: string;
@@ -20,10 +20,39 @@ export function MetricAreaChart({
   secondaryLabel?: string;
 }) {
   const [mounted, setMounted] = useState(false);
+  const [size, setSize] = useState({ width: 0, height: 0 });
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!mounted || !containerRef.current) {
+      return;
+    }
+
+    const element = containerRef.current;
+    const updateSize = () => {
+      const rect = element.getBoundingClientRect();
+      setSize({
+        width: Math.max(rect.width, 0),
+        height: Math.max(rect.height, 0)
+      });
+    };
+
+    updateSize();
+
+    const observer = new ResizeObserver(() => {
+      updateSize();
+    });
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [mounted]);
 
   if (!mounted) {
     return <div className="h-72 w-full rounded-[1.5rem] border border-black/5 bg-slate-50 dark:border-white/10 dark:bg-slate-950/40" />;
@@ -34,10 +63,11 @@ export function MetricAreaChart({
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
+      ref={containerRef}
       className="h-72 min-w-0 w-full"
     >
-      <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={288}>
-        <AreaChart data={data}>
+      {size.width > 0 && size.height > 0 ? (
+        <AreaChart width={size.width} height={size.height} data={data}>
           <defs>
             <linearGradient id="primaryGradient" x1="0" x2="0" y1="0" y2="1">
               <stop offset="5%" stopColor="#10b981" stopOpacity={0.36} />
@@ -65,7 +95,7 @@ export function MetricAreaChart({
             <Area type="monotone" dataKey="secondary" stroke="#0ea5e9" strokeWidth={2.4} fill="url(#secondaryGradient)" />
           ) : null}
         </AreaChart>
-      </ResponsiveContainer>
+      ) : null}
     </motion.div>
   );
 }

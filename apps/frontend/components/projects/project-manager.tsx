@@ -73,14 +73,14 @@ export function ProjectManager() {
 
   return (
     <>
-      <div className="flex items-center justify-between gap-4">
-        <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
           <h2 className="text-2xl font-semibold">Projects</h2>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
             Manage multiple monitored sites, statuses, and quality baselines.
           </p>
         </div>
-        <AppButton onClick={() => setOpen(true)}>
+        <AppButton onClick={() => setOpen(true)} className="w-full justify-center sm:w-auto">
           <Plus className="mr-2 size-4" />
           Add new project
         </AppButton>
@@ -89,7 +89,7 @@ export function ProjectManager() {
       <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {projects.map((project) => (
           <SurfaceCard key={project.id} className="overflow-hidden">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700 dark:text-sky-200">
                 <Globe2 className="size-3.5" />
                 {project.environment}
@@ -99,8 +99,8 @@ export function ProjectManager() {
               </span>
             </div>
             <h3 className="mt-4 text-xl font-semibold">{project.name}</h3>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{project.targetUrl}</p>
-            <div className="mt-5 grid grid-cols-2 gap-3">
+            <p className="mt-2 break-all text-sm text-slate-600 dark:text-slate-300">{project.targetUrl}</p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
               <div className="rounded-2xl border border-black/5 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-slate-950/40">
                 <p className="text-xs uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">SEO</p>
                 <p className="mt-2 text-2xl font-semibold">{project.seoScore}</p>
@@ -128,7 +128,7 @@ export function ProjectManager() {
             <select
               value={environment}
               onChange={(event) => setEnvironment(event.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none"
+              className="w-full min-w-0 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none"
             >
               <option value="production">Production</option>
               <option value="staging">Staging</option>

@@ -9,7 +9,7 @@ interface SurfaceCardProps extends PropsWithChildren {
 export function SurfaceCard({ title, description, className = "", children }: SurfaceCardProps) {
   return (
     <section
-      className={`rounded-[1.5rem] border border-black/5 bg-white/90 p-5 shadow-lg shadow-slate-300/10 dark:border-white/10 dark:bg-slate-900/75 ${className}`.trim()}
+      className={`min-w-0 overflow-hidden rounded-[1.5rem] border border-black/5 bg-white/90 p-5 shadow-lg shadow-slate-300/10 dark:border-white/10 dark:bg-slate-900/75 ${className}`.trim()}
     >
       {(title || description) && (
         <header className="mb-4">

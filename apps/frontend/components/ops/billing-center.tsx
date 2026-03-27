@@ -19,25 +19,54 @@ export function BillingCenter() {
   const [plans, setPlans] = useState<BillingPlan[]>([]);
   const [usage, setUsage] = useState<{ currentPlan: string; usage: { scansUsed: number; scansLimit: number; projectsUsed: number; projectsLimit: number } } | null>(null);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    fetch(`${endpoint}/api/billing/plans`).then((response) => response.json()).then((payload: { plans: BillingPlan[] }) => setPlans(payload.plans));
-    fetch(`${endpoint}/api/billing/usage`).then((response) => response.json()).then((payload) => setUsage(payload));
+    let mounted = true;
+
+    Promise.all([
+      fetch(`${endpoint}/api/billing/plans`).then((response) => response.json()),
+      fetch(`${endpoint}/api/billing/usage`).then((response) => response.json())
+    ])
+      .then(([plansPayload, usagePayload]: [{ plans: BillingPlan[] }, { currentPlan: string; usage: { scansUsed: number; scansLimit: number; projectsUsed: number; projectsLimit: number } }]) => {
+        if (!mounted) {
+          return;
+        }
+
+        setPlans(plansPayload.plans);
+        setUsage(usagePayload);
+      })
+      .catch(() => {
+        if (!mounted) {
+          return;
+        }
+
+        setError("Billing services are temporarily unavailable.");
+      });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const checkout = (plan: BillingPlan["id"]) => {
     startTransition(async () => {
-      const response = await fetch(`${endpoint}/api/billing/checkout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ plan })
-      });
+      try {
+        setError(null);
+        const response = await fetch(`${endpoint}/api/billing/checkout`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ plan })
+        });
 
-      const payload = (await response.json()) as { checkoutUrl: string };
-      setCheckoutUrl(payload.checkoutUrl);
+        const payload = (await response.json()) as { checkoutUrl: string };
+        setCheckoutUrl(payload.checkoutUrl);
+      } catch {
+        setError("Unable to start checkout right now.");
+      }
     });
   };
 
@@ -72,7 +101,12 @@ export function BillingCenter() {
               </div>
             ) : null}
           </div>
-        ) : null}
+        ) : (
+          <div className="rounded-2xl border border-black/5 bg-slate-50 px-4 py-4 text-sm text-slate-600 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-300">
+            Billing usage is not available yet.
+          </div>
+        )}
+        {error ? <p className="mt-4 text-sm text-rose-600 dark:text-rose-300">{error}</p> : null}
       </SurfaceCard>
     </div>
   );

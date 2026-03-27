@@ -75,7 +75,7 @@ export function AIChatPanel() {
           throw new Error(`Request failed with ${response.status}`);
         }
 
-    setResult((await response.json()) as ChatResponse);
+        setResult((await response.json()) as ChatResponse);
         setOpen(true);
       } catch (issue) {
         setError(issue instanceof Error ? issue.message : "Unable to run AI command");
@@ -88,7 +88,7 @@ export function AIChatPanel() {
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
-        className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-3 rounded-full border border-emerald-300/30 bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-2xl shadow-slate-950/30"
+        className="fixed bottom-4 right-3 z-40 inline-flex items-center gap-3 rounded-full border border-emerald-300/30 bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-2xl shadow-slate-950/30 sm:bottom-6 sm:right-6"
       >
         <Bot className="size-4 text-emerald-300" />
         AI Command
@@ -101,7 +101,7 @@ export function AIChatPanel() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 22 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="fixed bottom-24 right-6 z-40 w-[min(26rem,calc(100vw-2rem))] rounded-[2rem] border border-white/10 bg-slate-950/95 p-5 text-white shadow-2xl shadow-slate-950/40 backdrop-blur"
+            className="fixed bottom-20 left-3 right-3 z-40 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-950/95 p-4 text-white shadow-2xl shadow-slate-950/40 backdrop-blur sm:bottom-24 sm:left-auto sm:right-6 sm:w-[min(26rem,calc(100vw-2rem))] sm:p-5"
           >
             <div className="flex items-center justify-between gap-3">
               <div>

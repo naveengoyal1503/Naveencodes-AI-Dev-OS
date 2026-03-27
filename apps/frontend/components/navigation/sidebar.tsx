@@ -41,7 +41,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-full w-full max-w-72 flex-col justify-between rounded-[2rem] border border-white/10 bg-slate-950/85 p-5 text-slate-100 shadow-2xl shadow-slate-950/30 backdrop-blur xl:sticky xl:top-6">
+    <aside className="flex h-full w-full min-w-0 max-w-full flex-col justify-between rounded-[2rem] border border-white/10 bg-slate-950/85 p-4 text-slate-100 shadow-2xl shadow-slate-950/30 backdrop-blur sm:p-5 xl:sticky xl:top-6 xl:max-w-72">
       <div className="space-y-8">
         <div className="space-y-3">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-200">
@@ -71,9 +71,9 @@ export function Sidebar() {
                     : "border-white/5 bg-white/[0.03] text-slate-300 hover:border-white/10 hover:bg-white/[0.05] hover:text-white"
                 }`}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 items-start gap-3">
                   <Icon className="size-4" />
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-sm font-semibold">{item.label}</p>
                     <p className="text-xs text-slate-400">{item.description}</p>
                   </div>

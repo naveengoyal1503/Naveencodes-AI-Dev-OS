@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
 :root {
   color-scheme: light;
 }
@@ -11,13 +16,43 @@
 body {
   margin: 0;
   font-family: "Segoe UI", "Inter", sans-serif;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
 }
 
 * {
   box-sizing: border-box;
 }
 
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
 a {
   color: inherit;
   text-decoration: none;
+}
+
+pre,
+code {
+  max-width: 100%;
+}
+
+:where(main, section, article, aside, nav, header, footer) {
+  min-width: 0;
+}
+
+:where(h1, h2, h3, h4, p, span, a, li, button, label) {
+  overflow-wrap: anywhere;
 }

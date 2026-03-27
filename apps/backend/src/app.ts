@@ -1,6 +1,10 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import rateLimit from "@fastify/rate-limit";
+import staticSite from "@fastify/static";
+import { existsSync, statSync } from "node:fs";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 
 import { getEnv } from "./config/env.js";
 import { createDatabasePool, createRedisClient } from "./infrastructure/db.js";
@@ -23,6 +27,24 @@ declare module "fastify" {
   interface FastifyInstance {
     config: ReturnType<typeof getEnv>;
   }
+}
+
+function normalizeStaticPath(root: string, requestedPath: string) {
+  const relativePath = requestedPath.replace(/^[/\\]+/, "");
+  const absolutePath = path.resolve(root, relativePath);
+
+  if (!absolutePath.startsWith(root)) {
+    return null;
+  }
+
+  return {
+    absolutePath,
+    relativePath: relativePath.split(path.sep).join("/")
+  };
+}
+
+function isFilePath(targetPath: string) {
+  return existsSync(targetPath) && statSync(targetPath).isFile();
 }
 
 export async function buildServer() {
@@ -67,6 +89,57 @@ export async function buildServer() {
   await registerAiRoutes(app);
   await registerChatRoutes(app);
   await registerQaRoutes(app);
+
+  if (env.SERVE_FRONTEND_STATIC) {
+    const staticRoot = path.resolve(process.cwd(), env.FRONTEND_STATIC_DIR);
+
+    if (existsSync(staticRoot)) {
+      await app.register(staticSite, {
+        root: staticRoot,
+        prefix: "/",
+        index: false,
+        wildcard: false
+      });
+
+      app.get("/", async (_request, reply) => {
+        const html = await readFile(path.join(staticRoot, "index.html"), "utf8");
+        reply.type("text/html; charset=utf-8");
+        return html;
+      });
+
+      app.setNotFoundHandler(async (request, reply) => {
+        if (request.method !== "GET" && request.method !== "HEAD") {
+          reply.code(404);
+          return { message: "Not Found" };
+        }
+
+        const pathname = new URL(request.url, env.APP_URL).pathname;
+
+        if (pathname.startsWith("/api/") || pathname.startsWith("/ws/") || pathname === "/health") {
+          reply.code(404);
+          return { message: "Not Found" };
+        }
+
+        const directMatch = normalizeStaticPath(staticRoot, pathname);
+        if (directMatch && isFilePath(directMatch.absolutePath)) {
+          await reply.sendFile(directMatch.relativePath);
+          return;
+        }
+
+        const htmlMatch = normalizeStaticPath(staticRoot, path.join(pathname, "index.html"));
+        if (htmlMatch && isFilePath(htmlMatch.absolutePath)) {
+          const html = await readFile(htmlMatch.absolutePath, "utf8");
+          reply.type("text/html; charset=utf-8");
+          return html;
+        }
+
+        reply.code(404);
+        return { message: "Not Found" };
+      });
+    } else {
+      app.log.warn({ staticRoot }, "Configured frontend static directory was not found.");
+    }
+  }
 
   app.get("/health", async () => ({
     status: "ok",

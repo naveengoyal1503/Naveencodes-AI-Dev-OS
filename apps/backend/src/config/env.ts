@@ -26,7 +26,9 @@ const schema = z.object({
   PAYMENT_PROVIDER: z.string().default("stripe"),
   STRIPE_PUBLIC_KEY: z.string().default("pk_test_change_me"),
   STRIPE_SECRET_KEY: z.string().default("sk_test_change_me"),
-  ALERT_WEBHOOK_URL: z.string().url().default("https://hooks.example.com/naveencodes-ai")
+  ALERT_WEBHOOK_URL: z.string().url().default("https://hooks.example.com/naveencodes-ai"),
+  SERVE_FRONTEND_STATIC: z.coerce.boolean().default(false),
+  FRONTEND_STATIC_DIR: z.string().default("apps/frontend/out")
 });
 
 export type BackendEnv = z.infer<typeof schema>;

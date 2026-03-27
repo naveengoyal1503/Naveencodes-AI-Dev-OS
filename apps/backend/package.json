@@ -1,0 +1,26 @@
+{
+  "name": "@naveencodes/backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.2.0",
+    "@fastify/websocket": "^11.2.0",
+    "@naveencodes/ai": "0.1.0",
+    "@naveencodes/auth": "0.1.0",
+    "@naveencodes/core": "0.1.0",
+    "@naveencodes/mcp": "0.1.0",
+    "@naveencodes/reports": "0.1.0",
+    "dotenv": "^17.2.3",
+    "fastify": "^5.8.4",
+    "ioredis": "^5.10.1",
+    "pg": "^8.20.0",
+    "zod": "^4.3.6"
+  }
+}

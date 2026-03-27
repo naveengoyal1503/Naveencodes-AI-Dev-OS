@@ -1,0 +1,31 @@
+{
+  "name": "naveencodes-ai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NaveenCodes AI Dev OS monorepo foundation",
+  "packageManager": "npm@10.9.2",
+  "bin": {
+    "naveencodes-ai": "./bin/naveencodes-ai.js"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @naveencodes/core && npm run build --workspace @naveencodes/ai && npm run build --workspace @naveencodes/mcp && npm run build --workspace @naveencodes/reports && npm run build --workspace @naveencodes/auth && npm run build --workspace @naveencodes/backend && npm run build --workspace @naveencodes/frontend",
+    "dev": "concurrently -n frontend,backend -c cyan,magenta \"npm run dev --workspace @naveencodes/frontend\" \"npm run dev --workspace @naveencodes/backend\"",
+    "dev:frontend": "npm run dev --workspace @naveencodes/frontend",
+    "dev:backend": "npm run dev --workspace @naveencodes/backend",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspace @naveencodes/core && npm run typecheck --workspace @naveencodes/ai && npm run typecheck --workspace @naveencodes/mcp && npm run typecheck --workspace @naveencodes/reports && npm run typecheck --workspace @naveencodes/auth && npm run typecheck --workspace @naveencodes/backend && npm run typecheck --workspace @naveencodes/frontend",
+    "init": "node ./bin/naveencodes-ai.js init"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.10.1",
+    "@types/pg": "^8.15.6",
+    "concurrently": "^9.2.1",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  }
+}

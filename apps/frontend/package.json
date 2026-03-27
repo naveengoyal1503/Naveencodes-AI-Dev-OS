@@ -1,0 +1,30 @@
+{
+  "name": "@naveencodes/frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start --port 3000",
+    "lint": "next lint",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@naveencodes/ai": "0.1.0",
+    "@naveencodes/core": "0.1.0",
+    "framer-motion": "^12.8.2",
+    "lucide-react": "^1.7.0",
+    "next": "^16.2.1",
+    "next-themes": "^0.4.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "recharts": "^3.2.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "tailwindcss": "^4.2.2"
+  }
+}

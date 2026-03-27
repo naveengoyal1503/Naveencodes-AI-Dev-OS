@@ -25,9 +25,9 @@ export function MetricBarChart({ data, color = "#f59e0b" }: { data: MetricBarDat
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut", delay: 0.08 }}
-      className="h-72 w-full"
+      className="h-72 min-w-0 w-full"
     >
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={288}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="4 4" stroke="rgba(148, 163, 184, 0.22)" />
           <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />

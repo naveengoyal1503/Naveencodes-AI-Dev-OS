@@ -75,6 +75,16 @@ export const dashboardNavigation: NavItem[] = [
     description: "Generated audit outputs, live QA, and auto-fix runs."
   },
   {
+    href: "/autonomous",
+    label: "Autonomous",
+    description: "Next-gen AI orchestration, planning, health, and strategy."
+  },
+  {
+    href: "/ecosystem",
+    label: "Ecosystem",
+    description: "Future AI experiments, simulations, updates, and startup building."
+  },
+  {
     href: "/client",
     label: "Client",
     description: "Login, project history, and multi-site workspace."

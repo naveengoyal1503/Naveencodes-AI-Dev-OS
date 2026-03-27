@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Activity,
+  BrainCircuit,
   ChartNoAxesColumn,
   FileBarChart2,
   FolderKanban,
@@ -29,6 +30,8 @@ const icons = {
   "/ui-check": MousePointerClick,
   "/ecommerce": ShoppingCart,
   "/reports": FileBarChart2,
+  "/autonomous": BrainCircuit,
+  "/ecosystem": ChartNoAxesColumn,
   "/client": ShieldUser,
   "/settings": Settings,
   "/explanation": ReceiptText

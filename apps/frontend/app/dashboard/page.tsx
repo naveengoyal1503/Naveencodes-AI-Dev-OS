@@ -52,7 +52,7 @@ export default function DashboardPage() {
           <p className="text-sm uppercase tracking-[0.24em] text-emerald-300">Dashboard overview</p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight">Enterprise dashboard for browser QA, AI workflows, and client operations.</h2>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-            The control plane now includes executive metrics, live quality trends, alerting, multi-project switching, AI chat workflow triggers, and specialized workspaces for SEO, performance, UI, ecommerce, and client management.
+            The control plane now includes executive metrics, live quality trends, alerting, multi-project switching, AI chat workflow triggers, autonomous execution, future ecosystem experiments, and specialized workspaces for SEO, performance, UI, ecommerce, and client management.
           </p>
           <div className="mt-8 flex flex-wrap gap-3 text-sm">
             <span className="rounded-full border border-emerald-300/30 bg-emerald-300/10 px-4 py-2 text-emerald-100">AI chat panel</span>
@@ -117,6 +117,8 @@ export default function DashboardPage() {
               "Performance diagnostics and optimization guidance",
               "UI check workspace for layout and responsive issues",
               "Ecommerce flow validation for cart and checkout",
+              "Autonomous AI workspace for planning, self-healing, and product strategy",
+              "Future ecosystem workspace for digital twins, chaos tests, and startup building",
               "Reports and client-facing history"
             ].map((item) => (
               <div key={item} className="rounded-2xl border border-black/5 bg-slate-50 px-4 py-4 text-sm dark:border-white/10 dark:bg-slate-950/40">

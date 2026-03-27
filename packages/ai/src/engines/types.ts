@@ -12,7 +12,47 @@ export type WorkflowName =
   | "competitor_analysis"
   | "content_generation"
   | "senior_dev_review"
-  | "auto_refactor";
+  | "auto_refactor"
+  | "codebase_understanding"
+  | "auto_bug_reproducer"
+  | "ai_thinking_engine"
+  | "smart_version_control"
+  | "goal_based_execution"
+  | "auto_feature_generator"
+  | "global_site_health"
+  | "real_device_testing"
+  | "integration_engine"
+  | "architect_mode"
+  | "simulation_engine"
+  | "website_clone_engine"
+  | "memory_engine"
+  | "self_healing_engine"
+  | "client_ai_assistant"
+  | "product_strategist_ai"
+  | "compliance_engine"
+  | "ai_team_system"
+  | "next_gen_autonomous"
+  | "digital_twin_engine"
+  | "predictive_ai_engine"
+  | "human_behavior_simulator"
+  | "chaos_engine"
+  | "code_style_enforcer"
+  | "ai_app_store"
+  | "auto_backend_generator"
+  | "data_model_designer"
+  | "conversion_optimization_engine"
+  | "video_to_website_engine"
+  | "debug_history_system"
+  | "cross_site_intelligence"
+  | "team_collaboration_system"
+  | "auto_update_engine"
+  | "knowledge_base_engine"
+  | "voice_dev_mode"
+  | "legal_policy_engine"
+  | "cdn_optimizer"
+  | "ai_personality_system"
+  | "auto_startup_builder"
+  | "future_ai_ecosystem";
 
 export type SupportedProjectType =
   | "blog"
@@ -328,6 +368,17 @@ export interface AdvancedIntelligenceInput {
   screenshotNotes?: string[];
 }
 
+export type IntegrationSourceName = "github" | "vercel" | "chrome_devtools" | "search_console" | "stripe" | "alerts";
+
+export interface RepoSignals {
+  rootPath?: string;
+  workspacePackages: string[];
+  projectAreas: string[];
+  recentCommits: string[];
+  changedFiles: string[];
+  dirty: boolean;
+}
+
 export interface SeoIntelligenceReport {
   score: number;
   issues: string[];
@@ -435,4 +486,375 @@ export interface AdvancedIntelligenceReport {
   seniorDev: SeniorDevReview;
   alerts: QaAlert[];
   recommendations: string[];
+}
+
+export interface NextGenIntelligenceInput extends AdvancedIntelligenceInput {
+  goal?: string;
+  featureRequest?: string;
+  issueSummary?: string;
+  cloneUrl?: string;
+  clientCommand?: string;
+  productPrompt?: string;
+  incidentSummary?: string;
+  integrationSources?: IntegrationSourceName[];
+  userPreferences?: string[];
+  repoSignals?: RepoSignals;
+}
+
+export interface CodebaseDependencyNode {
+  name: string;
+  type: "app" | "package" | "service";
+  dependsOn: string[];
+}
+
+export interface CodebaseUnderstandingReport {
+  dependencyGraph: CodebaseDependencyNode[];
+  componentUsage: string[];
+  dataFlow: string[];
+  apiRelationships: string[];
+  impactAnalysis: string[];
+  safeChangeSuggestions: string[];
+}
+
+export interface BugReproductionReport {
+  bugTitle: string;
+  confirmed: boolean;
+  severity: Severity;
+  reproductionSteps: string[];
+  observedSignals: string[];
+  proposedFixes: string[];
+}
+
+export interface ThinkingStep {
+  title: string;
+  action: string;
+  validation: string;
+}
+
+export interface ThinkingEngineReport {
+  objective: string;
+  plan: ThinkingStep[];
+  executionNotes: string[];
+}
+
+export interface VersionControlInsight {
+  branchStrategy: string;
+  riskyCommits: string[];
+  rollbackSuggestions: string[];
+  releaseNotes: string[];
+}
+
+export interface GoalExecutionReport {
+  goal: string;
+  actions: string[];
+  expectedImpact: string[];
+  successMetrics: string[];
+}
+
+export interface FeatureGenerationReport {
+  feature: string;
+  backendChanges: string[];
+  frontendChanges: string[];
+  dataModelChanges: string[];
+  testPlan: string[];
+}
+
+export interface GlobalHealthScoreReport {
+  overall: number;
+  breakdown: {
+    seo: number;
+    performance: number;
+    ui: number;
+    security: number;
+  };
+  summary: string;
+}
+
+export interface DeviceSimulationResult {
+  device: string;
+  profile: "mobile" | "tablet" | "desktop";
+  network: string;
+  cpu: string;
+  risk: string;
+}
+
+export interface IntegrationEngineReport {
+  sources: Array<{
+    name: IntegrationSourceName;
+    status: "connected" | "configured" | "needs_attention";
+    observation: string;
+  }>;
+  recommendations: string[];
+}
+
+export interface ArchitectModeReport {
+  architectureSummary: string[];
+  scaleRecommendations: string[];
+  patternRecommendations: string[];
+}
+
+export interface SimulationEngineReport {
+  trafficGrowth: string[];
+  failurePredictions: string[];
+  stressPlan: string[];
+}
+
+export interface WebsiteCloneReport {
+  sourceUrl: string;
+  structureInsights: string[];
+  improvements: string[];
+  generatedModules: string[];
+}
+
+export interface MemoryEngineReport {
+  storedPatterns: SelfLearningInsight[];
+  userPreferences: string[];
+  nextBestActions: string[];
+}
+
+export interface SelfHealingReport {
+  issueDetected: string;
+  autoFixPlan: string[];
+  redeployPlan: string[];
+}
+
+export interface ClientAssistantReport {
+  command: string;
+  guidance: string[];
+  suggestedActions: string[];
+}
+
+export interface ProductStrategistReport {
+  prompt: string;
+  idea: string;
+  marketAngle: string[];
+  buildPlan: string[];
+  launchPlan: string[];
+}
+
+export interface ComplianceReport {
+  gdpr: string[];
+  cookies: string[];
+  privacy: string[];
+  actions: string[];
+}
+
+export interface AITeamContribution {
+  role: "AI Developer" | "AI QA" | "AI SEO" | "AI Designer";
+  contribution: string[];
+}
+
+export interface NextGenPredictions {
+  performanceRisk: string;
+  releaseReadiness: string;
+  revenueOpportunity: string;
+  scalingRisk: string;
+}
+
+export interface NextGenAutonomousReport {
+  health_score: number;
+  issues: string[];
+  suggestions: string[];
+  fixes: string[];
+  predictions: NextGenPredictions;
+  codebase: CodebaseUnderstandingReport;
+  bug_reproduction: BugReproductionReport;
+  thinking: ThinkingEngineReport;
+  version_control: VersionControlInsight;
+  goal_execution: GoalExecutionReport;
+  feature_generation: FeatureGenerationReport;
+  global_health: GlobalHealthScoreReport;
+  device_testing: DeviceSimulationResult[];
+  integrations: IntegrationEngineReport;
+  architecture: ArchitectModeReport;
+  simulation: SimulationEngineReport;
+  clone_engine: WebsiteCloneReport;
+  memory: MemoryEngineReport;
+  self_healing: SelfHealingReport;
+  client_assistant: ClientAssistantReport;
+  strategist: ProductStrategistReport;
+  compliance: ComplianceReport;
+  ai_team: AITeamContribution[];
+}
+
+export type PersonalityMode = "beginner" | "senior_dev" | "strict_reviewer";
+
+export interface FutureEcosystemInput extends NextGenIntelligenceInput {
+  videoSource?: string;
+  projects?: string[];
+  regions?: string[];
+  personalityMode?: PersonalityMode;
+  startupPrompt?: string;
+}
+
+export interface DigitalTwinExperiment {
+  name: string;
+  goal: string;
+  safetyRail: string;
+}
+
+export interface DigitalTwinReport {
+  twinSummary: string[];
+  experiments: DigitalTwinExperiment[];
+  abTests: string[];
+}
+
+export interface PredictiveAiReport {
+  future_predictions: string[];
+  riskWindows: string[];
+  mitigations: string[];
+}
+
+export interface HumanBehaviorSimulationReport {
+  behaviorPatterns: string[];
+  rageClickRisks: string[];
+  dropOffSignals: string[];
+}
+
+export interface ChaosEngineReport {
+  chaosScenarios: string[];
+  resilienceChecks: string[];
+  recoveryActions: string[];
+}
+
+export interface CodeStyleEnforcerReport {
+  standards: string[];
+  naming: string[];
+  fixes: string[];
+}
+
+export interface AiAppStoreReport {
+  marketplaceStatus: string;
+  extensionHooks: string[];
+  recommendedAddOns: string[];
+}
+
+export interface AutoBackendGeneratorReport {
+  apis: string[];
+  dbSchema: string[];
+  adminPanel: string[];
+}
+
+export interface DataModelDesignerReport {
+  entities: string[];
+  relations: string[];
+  indexes: string[];
+  scalingStrategy: string[];
+}
+
+export interface ConversionOptimizationReport {
+  ctaImprovements: string[];
+  uxOptimizations: string[];
+  engagementIdeas: string[];
+}
+
+export interface VideoToWebsiteReport {
+  inputSource: string;
+  extractedScenes: string[];
+  generatedSections: string[];
+  codeTargets: string[];
+}
+
+export interface DebugHistoryEntry {
+  issue: string;
+  fix: string;
+  timeline: string;
+}
+
+export interface DebugHistoryReport {
+  entries: DebugHistoryEntry[];
+  recurringPatterns: string[];
+}
+
+export interface CrossSiteIntelligenceReport {
+  projectsAnalyzed: string[];
+  bestPractices: string[];
+  transferSuggestions: string[];
+}
+
+export interface TeamCollaborationReport {
+  collaborationModes: string[];
+  sharedProjectFlows: string[];
+  comments: string[];
+}
+
+export interface AutoUpdateReport {
+  dependencyStrategy: string[];
+  compatibilityChecks: string[];
+  preventionRules: string[];
+}
+
+export interface KnowledgeBaseReport {
+  documentation: string[];
+  apiDocs: string[];
+  guides: string[];
+}
+
+export interface VoiceDevModeReport {
+  commands: string[];
+  mappedActions: string[];
+  confidenceNotes: string[];
+}
+
+export interface LegalPolicyReport {
+  privacyPolicy: string[];
+  termsOfService: string[];
+  cookiePolicy: string[];
+}
+
+export interface CdnOptimizerReport {
+  regions: string[];
+  routing: string[];
+  caching: string[];
+}
+
+export interface AiPersonalitySystemReport {
+  activeMode: PersonalityMode;
+  modeTraits: string[];
+  guardrails: string[];
+}
+
+export interface AutoStartupBuilderReport {
+  startupPrompt: string;
+  idea: string;
+  uiDirection: string[];
+  productBuild: string[];
+  deployPlan: string[];
+  marketingPlan: string[];
+}
+
+export interface FutureLearningData {
+  memory_patterns: number;
+  debug_entries: number;
+  cross_site_projects: number;
+  preferences: string[];
+}
+
+export interface FutureEcosystemReport {
+  future_predictions: string[];
+  improvements: string[];
+  experiments: string[];
+  learning_data: FutureLearningData;
+  ecosystem_status: "active" | "evolving" | "needs_attention";
+  autonomous: NextGenAutonomousReport;
+  digital_twin: DigitalTwinReport;
+  predictive_ai: PredictiveAiReport;
+  human_behavior: HumanBehaviorSimulationReport;
+  chaos_engine: ChaosEngineReport;
+  code_style: CodeStyleEnforcerReport;
+  app_store: AiAppStoreReport;
+  auto_backend: AutoBackendGeneratorReport;
+  data_model: DataModelDesignerReport;
+  conversion: ConversionOptimizationReport;
+  video_to_website: VideoToWebsiteReport;
+  debug_history: DebugHistoryReport;
+  cross_site: CrossSiteIntelligenceReport;
+  collaboration: TeamCollaborationReport;
+  auto_update: AutoUpdateReport;
+  knowledge_base: KnowledgeBaseReport;
+  voice_dev: VoiceDevModeReport;
+  legal_policy: LegalPolicyReport;
+  cdn_optimizer: CdnOptimizerReport;
+  personality: AiPersonalitySystemReport;
+  startup_builder: AutoStartupBuilderReport;
 }

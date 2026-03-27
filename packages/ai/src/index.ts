@@ -7,3 +7,5 @@ export * from "./engines/figma";
 export * from "./engines/i18n";
 export * from "./engines/qa";
 export * from "./engines/intelligence";
+export * from "./engines/next-gen";
+export * from "./engines/future-ecosystem";

@@ -11,6 +11,130 @@ const commandSchema = z.object({
 function chooseWorkflow(command: string): { workflow: string; title: string } {
   const normalized = command.toLowerCase();
 
+  if (normalized.includes("autonomous") || normalized.includes("next-gen")) {
+    return { workflow: "next_gen_autonomous", title: "Next-gen autonomous AI triggered" };
+  }
+
+  if (normalized.includes("ecosystem") || normalized.includes("future ai")) {
+    return { workflow: "future_ai_ecosystem", title: "Future AI ecosystem triggered" };
+  }
+
+  if (normalized.includes("digital twin")) {
+    return { workflow: "digital_twin_engine", title: "Digital twin engine triggered" };
+  }
+
+  if (normalized.includes("predict") || normalized.includes("future issue")) {
+    return { workflow: "predictive_ai_engine", title: "Predictive AI engine triggered" };
+  }
+
+  if (normalized.includes("behavior") || normalized.includes("rage click")) {
+    return { workflow: "human_behavior_simulator", title: "Human behavior simulator triggered" };
+  }
+
+  if (normalized.includes("chaos") || normalized.includes("downtime")) {
+    return { workflow: "chaos_engine", title: "Chaos engine triggered" };
+  }
+
+  if (normalized.includes("style") || normalized.includes("format")) {
+    return { workflow: "code_style_enforcer", title: "Code style enforcer triggered" };
+  }
+
+  if (normalized.includes("plugin") || normalized.includes("app store")) {
+    return { workflow: "ai_app_store", title: "AI app store system triggered" };
+  }
+
+  if (normalized.includes("backend generator") || normalized.includes("api generator")) {
+    return { workflow: "auto_backend_generator", title: "Auto backend generator triggered" };
+  }
+
+  if (normalized.includes("data model") || normalized.includes("schema")) {
+    return { workflow: "data_model_designer", title: "Data model designer triggered" };
+  }
+
+  if (normalized.includes("video")) {
+    return { workflow: "video_to_website_engine", title: "Video to website engine triggered" };
+  }
+
+  if (normalized.includes("cross-site") || normalized.includes("multi project")) {
+    return { workflow: "cross_site_intelligence", title: "Cross-site intelligence triggered" };
+  }
+
+  if (normalized.includes("update dependencies") || normalized.includes("auto update")) {
+    return { workflow: "auto_update_engine", title: "Auto update engine triggered" };
+  }
+
+  if (normalized.includes("knowledge base") || normalized.includes("docs")) {
+    return { workflow: "knowledge_base_engine", title: "Knowledge base engine triggered" };
+  }
+
+  if (normalized.includes("voice")) {
+    return { workflow: "voice_dev_mode", title: "Voice dev mode triggered" };
+  }
+
+  if (normalized.includes("policy") || normalized.includes("terms")) {
+    return { workflow: "legal_policy_engine", title: "Legal policy engine triggered" };
+  }
+
+  if (normalized.includes("cdn") || normalized.includes("region")) {
+    return { workflow: "cdn_optimizer", title: "CDN optimizer triggered" };
+  }
+
+  if (normalized.includes("personality") || normalized.includes("strict reviewer") || normalized.includes("beginner mode")) {
+    return { workflow: "ai_personality_system", title: "AI personality system triggered" };
+  }
+
+  if (normalized.includes("startup")) {
+    return { workflow: "auto_startup_builder", title: "Auto startup builder triggered" };
+  }
+
+  if (normalized.includes("codebase") || normalized.includes("dependency")) {
+    return { workflow: "codebase_understanding", title: "Codebase understanding engine triggered" };
+  }
+
+  if (normalized.includes("bug") || normalized.includes("reproduce")) {
+    return { workflow: "auto_bug_reproducer", title: "Auto bug reproducer triggered" };
+  }
+
+  if (normalized.includes("plan") || normalized.includes("thinking")) {
+    return { workflow: "ai_thinking_engine", title: "AI thinking engine triggered" };
+  }
+
+  if (normalized.includes("git") || normalized.includes("rollback") || normalized.includes("branch")) {
+    return { workflow: "smart_version_control", title: "Version control intelligence triggered" };
+  }
+
+  if (normalized.includes("goal") || normalized.includes("conversion")) {
+    return { workflow: "goal_based_execution", title: "Goal-based execution triggered" };
+  }
+
+  if (normalized.includes("feature") || normalized.includes("login")) {
+    return { workflow: "auto_feature_generator", title: "Auto feature generator triggered" };
+  }
+
+  if (normalized.includes("health score") || normalized.includes("health")) {
+    return { workflow: "global_site_health", title: "Global site health calculation triggered" };
+  }
+
+  if (normalized.includes("device") || normalized.includes("mobile")) {
+    return { workflow: "real_device_testing", title: "Real device testing triggered" };
+  }
+
+  if (normalized.includes("compliance") || normalized.includes("gdpr") || normalized.includes("privacy")) {
+    return { workflow: "compliance_engine", title: "Compliance engine triggered" };
+  }
+
+  if (normalized.includes("clone")) {
+    return { workflow: "website_clone_engine", title: "Website clone engine triggered" };
+  }
+
+  if (normalized.includes("memory")) {
+    return { workflow: "memory_engine", title: "Memory engine triggered" };
+  }
+
+  if (normalized.includes("product") || normalized.includes("saas idea")) {
+    return { workflow: "product_strategist_ai", title: "Product strategist AI triggered" };
+  }
+
   if (normalized.includes("seo")) {
     return { workflow: "seo_full_scan", title: "SEO analyzer triggered" };
   }
@@ -56,7 +180,69 @@ export async function registerChatRoutes(app: FastifyInstance) {
       response: {
         title: workflow.title,
         summary:
-          workflow.workflow === "seo_full_scan"
+          workflow.workflow === "next_gen_autonomous"
+            ? "Autonomous mode is combining codebase, bug, health, version-control, compliance, and strategist intelligence into one report."
+            : workflow.workflow === "future_ai_ecosystem"
+              ? "Future ecosystem mode is combining digital twin, predictive AI, chaos testing, app store, startup builder, and cross-site intelligence."
+              : workflow.workflow === "digital_twin_engine"
+                ? "Digital twin mode is preparing safe experiments for UI, performance, and A/B changes."
+                : workflow.workflow === "predictive_ai_engine"
+                  ? "Predictive mode is surfacing likely API, performance, and scaling issues before they ship."
+                  : workflow.workflow === "human_behavior_simulator"
+                    ? "Behavior simulation is modeling random clicks, scroll depth, rage clicks, and drop-off risks."
+                    : workflow.workflow === "chaos_engine"
+                      ? "Chaos mode is planning downtime, latency, and network resilience tests."
+                      : workflow.workflow === "code_style_enforcer"
+                        ? "Code style mode is reviewing standards, naming, and consistency boundaries."
+                        : workflow.workflow === "ai_app_store"
+                          ? "App store mode is focusing on plugins, add-ons, and extension hooks."
+                          : workflow.workflow === "auto_backend_generator"
+                            ? "Backend generator mode is planning APIs, schema, and admin panels."
+                            : workflow.workflow === "data_model_designer"
+                              ? "Data model mode is designing relations, indexes, and scaling strategy."
+                              : workflow.workflow === "video_to_website_engine"
+                                ? "Video mode is turning scenes into UI sections and code targets."
+                                : workflow.workflow === "cross_site_intelligence"
+                                  ? "Cross-site intelligence is transferring learnings across multiple managed projects."
+                                  : workflow.workflow === "auto_update_engine"
+                                    ? "Auto update mode is checking dependency strategy and compatibility safety."
+                                    : workflow.workflow === "knowledge_base_engine"
+                                      ? "Knowledge base mode is generating docs, guides, and API references."
+                                      : workflow.workflow === "voice_dev_mode"
+                                        ? "Voice dev mode is mapping spoken commands into development actions."
+                                        : workflow.workflow === "legal_policy_engine"
+                                          ? "Legal policy mode is generating privacy, terms, and cookie guidance."
+                                          : workflow.workflow === "cdn_optimizer"
+                                            ? "CDN optimizer mode is reviewing regional delivery and caching strategy."
+                                            : workflow.workflow === "ai_personality_system"
+                                              ? "Personality mode is selecting how the AI should communicate and review work."
+                                              : workflow.workflow === "auto_startup_builder"
+                                                ? "Startup builder mode is generating the idea, UI, product plan, deploy path, and marketing strategy."
+            : workflow.workflow === "codebase_understanding"
+              ? "Codebase engine is mapping dependencies, data flow, and safe change boundaries."
+              : workflow.workflow === "auto_bug_reproducer"
+                ? `Bug reproduction is ready with ${audit.errors.length} active issue signals available for confirmation.`
+                : workflow.workflow === "ai_thinking_engine"
+                  ? "Thinking mode is planning work before execution and attaching validation to every step."
+                  : workflow.workflow === "smart_version_control"
+                    ? "Version control intelligence is reviewing branch safety, rollback boundaries, and release hygiene."
+                    : workflow.workflow === "goal_based_execution"
+                      ? "Goal mode is translating business intent into UI, performance, and UX actions."
+                      : workflow.workflow === "auto_feature_generator"
+                        ? "Feature generator is preparing backend, frontend, data, and test work for the requested capability."
+                        : workflow.workflow === "global_site_health"
+                          ? `Global health can be calculated from SEO ${audit.seo.score}, performance ${audit.performance.score}, UI, and security signals.`
+                          : workflow.workflow === "real_device_testing"
+                            ? "Device testing mode is preparing mobile, tablet, slow network, and CPU-constrained scenarios."
+                            : workflow.workflow === "compliance_engine"
+                              ? "Compliance mode is reviewing privacy, cookie, and consent readiness."
+                              : workflow.workflow === "website_clone_engine"
+                                ? "Clone engine is extracting layout structure and proposing an improved rebuild path."
+                                : workflow.workflow === "memory_engine"
+                                  ? "Memory mode is surfacing previous fixes and user preferences for faster decision-making."
+                                  : workflow.workflow === "product_strategist_ai"
+                                    ? "Product strategist mode is generating a SaaS concept, build path, and launch angle."
+            : workflow.workflow === "seo_full_scan"
             ? `SEO score is ${audit.seo.score} with ${audit.seo.missing.length} structured issues to resolve.`
             : workflow.workflow === "performance_scan"
               ? `Performance score is ${audit.performance.score}, with LCP at ${audit.performance.lcpMs}ms.`
@@ -71,7 +257,69 @@ export async function registerChatRoutes(app: FastifyInstance) {
                   : `${audit.errors.length} browser issues were grouped for the QA auto-fix loop.`,
         actions: audit.fixes_applied.slice(0, 3).map((fix) => fix.title),
         affectedArea:
-          workflow.workflow === "seo_full_scan"
+          workflow.workflow === "next_gen_autonomous"
+            ? "Autonomous command center"
+            : workflow.workflow === "future_ai_ecosystem"
+              ? "Future ecosystem workspace"
+              : workflow.workflow === "digital_twin_engine"
+                ? "Experiment lab"
+                : workflow.workflow === "predictive_ai_engine"
+                  ? "Future ecosystem workspace"
+                  : workflow.workflow === "human_behavior_simulator"
+                    ? "UX simulation workspace"
+                    : workflow.workflow === "chaos_engine"
+                      ? "Resilience lab"
+                      : workflow.workflow === "code_style_enforcer"
+                        ? "Developer standards workspace"
+                        : workflow.workflow === "ai_app_store"
+                          ? "Plugin marketplace"
+                          : workflow.workflow === "auto_backend_generator"
+                            ? "Project generator workspace"
+                            : workflow.workflow === "data_model_designer"
+                              ? "Architecture workspace"
+                              : workflow.workflow === "video_to_website_engine"
+                                ? "Design conversion workspace"
+                                : workflow.workflow === "cross_site_intelligence"
+                                  ? "Projects workspace"
+                                  : workflow.workflow === "auto_update_engine"
+                                    ? "Release workspace"
+                                    : workflow.workflow === "knowledge_base_engine"
+                                      ? "Documentation workspace"
+                                      : workflow.workflow === "voice_dev_mode"
+                                        ? "AI chat panel"
+                                        : workflow.workflow === "legal_policy_engine"
+                                          ? "Settings and compliance workspace"
+                                          : workflow.workflow === "cdn_optimizer"
+                                            ? "Performance workspace"
+                                            : workflow.workflow === "ai_personality_system"
+                                              ? "AI settings workspace"
+                                              : workflow.workflow === "auto_startup_builder"
+                                                ? "Future ecosystem workspace"
+            : workflow.workflow === "codebase_understanding"
+              ? "Architecture workspace"
+              : workflow.workflow === "auto_bug_reproducer"
+                ? "Reports QA control center"
+                : workflow.workflow === "ai_thinking_engine"
+                  ? "Autonomous planning workspace"
+                  : workflow.workflow === "smart_version_control"
+                    ? "Git and release review workspace"
+                    : workflow.workflow === "goal_based_execution"
+                      ? "Autonomous command center"
+                      : workflow.workflow === "auto_feature_generator"
+                        ? "Project and feature workspace"
+                        : workflow.workflow === "global_site_health"
+                          ? "Autonomous command center"
+                          : workflow.workflow === "real_device_testing"
+                            ? "UI check workspace"
+                            : workflow.workflow === "compliance_engine"
+                              ? "Settings and compliance workspace"
+                              : workflow.workflow === "website_clone_engine"
+                                ? "Project generator workspace"
+                                : workflow.workflow === "memory_engine"
+                                  ? "Autonomous command center"
+                                  : workflow.workflow === "product_strategist_ai"
+                                    ? "Product strategy workspace"
+          : workflow.workflow === "seo_full_scan"
             ? "SEO analyzer"
             : workflow.workflow === "performance_scan"
               ? "Performance dashboard"

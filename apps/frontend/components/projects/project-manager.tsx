@@ -3,12 +3,13 @@
 import { useEffect, useState, useTransition } from "react";
 import { Globe2, Plus } from "lucide-react";
 
+import { getApiBaseUrl } from "../../lib/api";
 import { AppButton } from "../ui/button";
 import { SurfaceCard } from "../ui/card";
 import { FieldShell, TextInput } from "../ui/form-field";
 import { Modal } from "../ui/modal";
 
-const endpoint = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const endpoint = getApiBaseUrl();
 
 interface ProjectItem {
   id: string;

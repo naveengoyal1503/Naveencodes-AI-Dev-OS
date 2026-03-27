@@ -2,10 +2,11 @@
 
 import { useEffect, useState, useTransition } from "react";
 
+import { getApiBaseUrl } from "../../lib/api";
 import { AppButton } from "../ui/button";
 import { SurfaceCard } from "../ui/card";
 
-const endpoint = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const endpoint = getApiBaseUrl();
 
 interface BillingPlan {
   id: "free" | "pro" | "enterprise";

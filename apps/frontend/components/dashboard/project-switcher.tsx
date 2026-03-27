@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-const endpoint = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+import { getApiBaseUrl } from "../../lib/api";
+
+const endpoint = getApiBaseUrl();
 
 interface ProjectItem {
   id: string;

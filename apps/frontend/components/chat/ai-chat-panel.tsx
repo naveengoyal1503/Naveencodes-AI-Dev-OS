@@ -4,10 +4,11 @@ import { useState, useTransition } from "react";
 import { Bot, Mic, SendHorizonal, Sparkles } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
+import { getApiBaseUrl } from "../../lib/api";
 import { AppButton } from "../ui/button";
 import { TextInput } from "../ui/form-field";
 
-const endpoint = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const endpoint = getApiBaseUrl();
 const suggestions = [
   "fix UI issues",
   "improve SEO",

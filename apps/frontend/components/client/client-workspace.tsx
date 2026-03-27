@@ -2,12 +2,13 @@
 
 import { useState, useTransition } from "react";
 
+import { getApiBaseUrl } from "../../lib/api";
 import { AppButton } from "../ui/button";
 import { SurfaceCard } from "../ui/card";
 import { FieldShell, TextArea, TextInput } from "../ui/form-field";
 import { BillingCenter } from "../ops/billing-center";
 
-const endpoint = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const endpoint = getApiBaseUrl();
 
 interface AuthUser {
   id: string;

@@ -5,12 +5,13 @@ import { Activity, Bug, Gauge, Radar, RefreshCcw, ShieldCheck, Siren, Wrench } f
 
 import type { QaAlert, QaAuditResult, QaFixPlan, QaLoadTestResult, QaMonitorSession, QaSecurityFinding } from "@naveencodes/ai";
 
+import { getApiBaseUrl } from "../../lib/api";
 import { AppButton } from "../ui/button";
 import { SurfaceCard } from "../ui/card";
 import { FieldShell, TextInput } from "../ui/form-field";
 import { Modal } from "../ui/modal";
 
-const endpoint = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const endpoint = getApiBaseUrl();
 
 interface QAControlCenterProps {
   starterAudit: QaAuditResult;

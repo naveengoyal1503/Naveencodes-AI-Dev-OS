@@ -13,6 +13,7 @@ import type {
   TranslationBundle
 } from "@naveencodes/ai";
 
+import { getApiBaseUrl } from "../../lib/api";
 import { LanguageSwitcher } from "../i18n/language-switcher";
 import { useLocale } from "../i18n/locale-provider";
 import { AppButton } from "../ui/button";
@@ -20,7 +21,7 @@ import { SurfaceCard } from "../ui/card";
 import { FieldShell, TextArea, TextInput } from "../ui/form-field";
 import { Modal } from "../ui/modal";
 
-const endpoint = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const endpoint = getApiBaseUrl();
 
 interface DashboardStudioProps {
   starterBlueprint: GeneratedProjectBlueprint;

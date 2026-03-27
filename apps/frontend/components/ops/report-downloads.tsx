@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 
+import { getApiBaseUrl } from "../../lib/api";
 import { AppButton } from "../ui/button";
 import { SurfaceCard } from "../ui/card";
 
-const endpoint = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const endpoint = getApiBaseUrl();
 
 interface ReportItem {
   id: string;

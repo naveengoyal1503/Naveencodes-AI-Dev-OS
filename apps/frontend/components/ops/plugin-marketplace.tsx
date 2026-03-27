@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 
+import { getApiBaseUrl } from "../../lib/api";
 import { SurfaceCard } from "../ui/card";
 
-const endpoint = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const endpoint = getApiBaseUrl();
 
 interface PluginItem {
   id: string;

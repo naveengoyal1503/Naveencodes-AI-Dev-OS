@@ -3,11 +3,12 @@
 import { useEffect, useState, useTransition } from "react";
 import { ExternalLink, Rocket, Share2 } from "lucide-react";
 
+import { getApiBaseUrl } from "../../lib/api";
 import { AppButton } from "../ui/button";
 import { SurfaceCard } from "../ui/card";
 import { FieldShell, TextInput } from "../ui/form-field";
 
-const endpoint = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const endpoint = getApiBaseUrl();
 
 interface DeploymentOverview {
   repository: string;

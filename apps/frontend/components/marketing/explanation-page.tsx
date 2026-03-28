@@ -17,12 +17,10 @@ import {
   Play,
   Rocket,
   SearchCheck,
-  ShieldCheck,
   ShoppingCart,
   Sparkles,
   Wand2,
   Workflow,
-  Zap
 } from "lucide-react";
 
 const heroPromptExamples = ["Build a blog site", "Fix performance", "Test checkout", "Convert Figma to code"];
@@ -208,7 +206,7 @@ function SectionHeading({
 }) {
   return (
     <div className={align === "center" ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
-      <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">{eyebrow}</p>
+      <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-100">{eyebrow}</p>
       <h2 className="mt-4 text-4xl font-semibold leading-tight text-white sm:text-5xl">{title}</h2>
       <p className="mt-4 text-base leading-8 text-slate-300 sm:text-lg">{description}</p>
     </div>
@@ -224,6 +222,18 @@ function GlassCard({
 }) {
   return <div className={`glass-panel rounded-[1.75rem] ${className}`.trim()}>{children}</div>;
 }
+
+const primaryButtonClass =
+  "primary-cta inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-4 text-sm font-semibold transition hover:-translate-y-0.5";
+
+const secondaryButtonClass =
+  "secondary-cta inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-4 text-sm font-semibold transition hover:-translate-y-0.5";
+
+const eyebrowPillClass =
+  "eyebrow-pill inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-100";
+
+const insetPanelClass = "surface-panel rounded-[1.5rem] p-5";
+const insetPanelStrongClass = "surface-panel surface-panel-strong rounded-[1.5rem] p-5";
 
 export function ExplanationPage() {
   const [prompt, setPrompt] = useState("Build a blog site");
@@ -261,7 +271,7 @@ export function ExplanationPage() {
   );
 
   return (
-    <main className="marketing-mesh noise-overlay min-h-screen overflow-hidden px-4 py-4 text-white sm:px-6 lg:px-8">
+    <main className="landing-page marketing-mesh noise-overlay min-h-screen overflow-hidden px-4 py-4 text-white sm:px-6 lg:px-8">
       <div className="hero-orb left-[6%] top-[4%] h-44 w-44 bg-cyan-400/30" />
       <div className="hero-orb right-[8%] top-[11%] h-56 w-56 bg-indigo-400/26 [animation-delay:2s]" />
       <div className="hero-orb bottom-[22%] left-[28%] h-40 w-40 bg-violet-500/20 [animation-delay:4s]" />
@@ -280,62 +290,56 @@ export function ExplanationPage() {
         />
       ))}
 
-      <div className="relative mx-auto flex max-w-7xl flex-col gap-24 pb-24 pt-6 sm:gap-28 sm:pt-8">
+      <div className="relative mx-auto flex max-w-7xl flex-col gap-20 pb-24 pt-6 sm:gap-24 sm:pt-8">
         <motion.header
           {...fadeUp()}
           className="glass-panel glow-ring sticky top-3 z-30 flex flex-col gap-4 rounded-[2rem] px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-violet-500 shadow-lg shadow-cyan-500/25">
-              <BrainCircuit className="size-5" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-300/95 via-sky-400/95 to-indigo-400/95 shadow-lg shadow-cyan-500/20">
+              <BrainCircuit className="size-5 text-slate-950" />
             </div>
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-cyan-200">NaveenCodes AI Dev OS</p>
+              <p className="text-xs uppercase tracking-[0.28em] text-cyan-100">NaveenCodes AI Dev OS</p>
               <p className="text-sm text-slate-300">Build, test, fix, and deploy from one AI operating system.</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/8 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/12"
-            >
+            <Link href="/dashboard" className={`${secondaryButtonClass} rounded-full px-5 py-3`}>
               Open Dashboard
             </Link>
-            <Link
-              href="/client"
-              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-cyan-500/30"
-            >
+            <Link href="/client" className={`${primaryButtonClass} rounded-full px-5 py-3`}>
               Start Free
             </Link>
           </div>
         </motion.header>
 
         <section className="relative">
-          <div className="grid gap-10 lg:grid-cols-[1.06fr_0.94fr] lg:items-center">
+          <div className="grid gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
             <motion.div {...fadeUp(0.08)} className="relative z-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">
+              <div className={eyebrowPillClass}>
                 <Sparkles className="size-3.5" />
                 Premium AI Workflow Platform
               </div>
-              <h1 className="mt-8 max-w-5xl text-5xl font-semibold leading-[0.95] sm:text-6xl lg:text-7xl">
+              <h1 className="mt-8 max-w-5xl text-5xl font-semibold leading-[0.94] text-white sm:text-6xl lg:text-7xl">
                 Build, Test, Fix, and Deploy <span className="hero-shimmer">{"\u2014"} All with AI</span>
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
                 Your AI Developer, Designer, QA Tester, and DevOps in one platform.
               </p>
 
-              <div className="mt-8 flex flex-wrap gap-3 text-sm text-slate-300">
+              <div className="mt-8 flex flex-wrap gap-3 text-sm text-slate-200">
                 {["Project generation", "Browser QA", "Auto-fix loops", "Deployment control"].map((item) => (
-                  <span key={item} className="rounded-full border border-white/10 bg-white/6 px-4 py-2">
+                  <span key={item} className="surface-panel rounded-full px-4 py-2">
                     {item}
                   </span>
                 ))}
               </div>
 
-              <GlassCard className="mt-10 p-5 sm:p-6">
+              <GlassCard className="mt-10 p-6 sm:p-8">
                 <div className="flex flex-col gap-4 lg:flex-row">
                   <div className="flex-1">
-                    <p className="text-xs uppercase tracking-[0.22em] text-cyan-200">Live demo</p>
+                    <p className="text-xs uppercase tracking-[0.22em] text-cyan-100">Live demo</p>
                     <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                       <input
                         value={prompt}
@@ -343,20 +347,16 @@ export function ExplanationPage() {
                           setPrompt(event.target.value);
                           setDemoState("idle");
                         }}
-                        className="min-w-0 flex-1 rounded-2xl border border-white/12 bg-slate-950/60 px-4 py-4 text-base text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300/60"
+                        className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-slate-950/55 px-4 py-4 text-base text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-200/50 focus:bg-slate-950/70"
                         placeholder={heroPromptExamples[activeExample]}
                       />
-                      <button
-                        type="button"
-                        onClick={() => setDemoState("loading")}
-                        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 px-5 py-4 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-cyan-500/30"
-                      >
+                      <button type="button" onClick={() => setDemoState("loading")} className={primaryButtonClass}>
                         Simulate Build
                         <ArrowRight className="size-4" />
                       </button>
                     </div>
                     <p className="mt-3 text-sm text-slate-400">
-                      Try: <span className="text-cyan-200">{heroPromptExamples[activeExample]}</span>
+                      Try: <span className="text-cyan-100">{heroPromptExamples[activeExample]}</span>
                     </p>
                   </div>
 
@@ -367,7 +367,7 @@ export function ExplanationPage() {
                         initial={{ opacity: 0, x: 18 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -12 }}
-                        className="w-full rounded-[1.5rem] border border-cyan-400/15 bg-slate-950/80 p-4 sm:max-w-sm"
+                        className={`w-full sm:max-w-sm ${insetPanelStrongClass}`}
                       >
                         <p className="text-sm font-semibold text-white">Generating workspace...</p>
                         <div className="mt-4 space-y-3">
@@ -395,18 +395,18 @@ export function ExplanationPage() {
                         initial={{ opacity: 0, x: 18 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -12 }}
-                        className="w-full rounded-[1.5rem] border border-white/10 bg-slate-950/80 p-4 sm:max-w-sm"
+                        className={`w-full sm:max-w-sm ${insetPanelStrongClass}`}
                       >
                         <div className="flex items-center justify-between">
                           <p className="text-sm font-semibold text-white">Generated preview</p>
-                          <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-emerald-200">
+                          <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-emerald-100">
                             Score {generatedPreview.qualityScore}
                           </span>
                         </div>
-                        <p className="mt-3 text-base font-semibold text-cyan-200">{generatedPreview.project}</p>
+                        <p className="mt-3 text-base font-semibold text-cyan-100">{generatedPreview.project}</p>
                         <div className="mt-4 grid gap-2">
                           {generatedPreview.routes.map((route) => (
-                            <div key={route} className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-sm text-slate-200">
+                            <div key={route} className="surface-panel rounded-2xl px-3 py-3 text-sm text-slate-200">
                               {route}
                             </div>
                           ))}
@@ -427,18 +427,18 @@ export function ExplanationPage() {
             </motion.div>
 
             <motion.div {...fadeUp(0.16)} className="relative z-10">
-              <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/75 p-4 shadow-[0_24px_80px_rgba(8,15,38,0.55)] sm:p-6">
+              <div className="surface-panel-strong relative overflow-hidden rounded-[2rem] p-4 sm:p-6">
                 <div className="absolute inset-x-10 top-0 h-32 bg-gradient-to-b from-cyan-400/12 via-blue-500/10 to-transparent blur-2xl" />
                 <div className="relative grid gap-4">
                   <div className="grid gap-4 lg:grid-cols-[1.12fr_0.88fr]">
-                    <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
+                    <div className={insetPanelClass}>
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-xs uppercase tracking-[0.24em] text-slate-400">AI build session</p>
                           <p className="mt-2 text-xl font-semibold text-white">Blog site generated in 02:18</p>
                         </div>
-                        <div className="rounded-2xl bg-gradient-to-br from-cyan-400/20 to-violet-400/20 p-3">
-                          <Code2 className="size-5 text-cyan-200" />
+                        <div className="rounded-2xl bg-gradient-to-br from-cyan-300/16 to-indigo-400/16 p-3">
+                          <Code2 className="size-5 text-cyan-100" />
                         </div>
                       </div>
                       <div className="mt-5 space-y-3">
@@ -448,7 +448,7 @@ export function ExplanationPage() {
                           "SEO metadata + performance budget",
                           "Deploy preview and QA checks"
                         ].map((line) => (
-                          <div key={line} className="flex items-center justify-between rounded-2xl border border-white/8 bg-slate-950/70 px-4 py-3">
+                          <div key={line} className="surface-panel-strong flex items-center justify-between rounded-2xl px-4 py-3">
                             <span className="text-sm text-slate-200">{line}</span>
                             <span className="text-xs uppercase tracking-[0.22em] text-emerald-300">Ready</span>
                           </div>
@@ -456,7 +456,7 @@ export function ExplanationPage() {
                       </div>
                     </div>
 
-                    <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
+                    <div className={insetPanelClass}>
                       <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Health pulse</p>
                       <div className="mt-4 grid gap-3">
                         {[
@@ -464,7 +464,7 @@ export function ExplanationPage() {
                           { label: "Deploy readiness", value: "Green" },
                           { label: "Critical issues", value: "02" }
                         ].map((item) => (
-                          <div key={item.label} className="rounded-2xl border border-white/8 bg-slate-950/70 px-4 py-4">
+                          <div key={item.label} className="surface-panel-strong rounded-2xl px-4 py-4">
                             <p className="text-xs uppercase tracking-[0.18em] text-slate-500">{item.label}</p>
                             <p className="mt-2 text-2xl font-semibold text-white">{item.value}</p>
                           </div>
@@ -474,7 +474,7 @@ export function ExplanationPage() {
                   </div>
 
                   <div className="grid gap-4 lg:grid-cols-[0.92fr_1.08fr]">
-                    <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
+                    <div className={insetPanelClass}>
                       <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Runtime logs</p>
                       <div className="mt-4 space-y-3 text-sm">
                         {[
@@ -482,17 +482,17 @@ export function ExplanationPage() {
                           "Performance budget passed on /pricing",
                           "Preview deployment created for client review"
                         ].map((log) => (
-                          <div key={log} className="rounded-2xl border border-white/8 bg-slate-950/70 px-4 py-3 text-slate-200">
+                          <div key={log} className="surface-panel-strong rounded-2xl px-4 py-3 text-slate-200">
                             {log}
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
+                    <div className={insetPanelClass}>
                       <div className="flex items-center justify-between">
                         <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Analytics preview</p>
-                        <ChartColumn className="size-4 text-cyan-200" />
+                          <ChartColumn className="size-4 text-cyan-100" />
                       </div>
                       <div className="mt-6 flex h-44 items-end gap-3">
                         {[36, 58, 54, 78, 72, 88, 96].map((height, index) => (
@@ -516,8 +516,8 @@ export function ExplanationPage() {
 
         <motion.section {...fadeUp()} className="grid gap-4 md:grid-cols-3">
           {trustStats.map((stat) => (
-            <GlassCard key={stat.label} className="p-6">
-              <p className="text-sm uppercase tracking-[0.26em] text-slate-300">{stat.label}</p>
+            <GlassCard key={stat.label} className="p-6 sm:p-7">
+              <p className="text-sm uppercase tracking-[0.26em] text-slate-400">{stat.label}</p>
               <p className="mt-4 text-4xl font-semibold text-white">{stat.value}</p>
             </GlassCard>
           ))}
@@ -540,9 +540,9 @@ export function ExplanationPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.25 }}
                   transition={{ duration: 0.55, delay: index * 0.08 }}
-                  className="glass-panel group rounded-[1.75rem] p-6 transition hover:-translate-y-1.5 hover:border-cyan-300/25"
+                  className="glass-panel group rounded-[1.75rem] p-6 transition hover:-translate-y-1.5 hover:border-cyan-300/18"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400/20 via-blue-500/20 to-violet-500/20 text-cyan-100">
+                  <div className="eyebrow-pill flex h-12 w-12 items-center justify-center rounded-2xl text-cyan-100">
                     <Icon className="size-5" />
                   </div>
                   <h3 className="mt-6 text-2xl font-semibold text-white">{item.title}</h3>
@@ -572,7 +572,7 @@ export function ExplanationPage() {
                 <GlassCard className="flex h-full flex-col p-6">
                   <div className="flex items-center justify-between">
                     <span className="text-3xl font-semibold text-white/95">{step.id}</span>
-                    <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs uppercase tracking-[0.24em] text-cyan-100">
+                    <span className="eyebrow-pill rounded-full px-3 py-1 text-xs uppercase tracking-[0.24em] text-cyan-100">
                       Step
                     </span>
                   </div>
@@ -607,7 +607,7 @@ export function ExplanationPage() {
                   whileHover={{ y: -6, scale: 1.01 }}
                 >
                   <GlassCard className="group h-full p-6">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400/18 via-blue-500/18 to-violet-500/18 text-cyan-100 shadow-lg shadow-cyan-500/10 transition group-hover:shadow-cyan-500/25">
+                    <div className="eyebrow-pill flex h-12 w-12 items-center justify-center rounded-2xl text-cyan-100 transition group-hover:border-cyan-200/30">
                       <Icon className="size-5" />
                     </div>
                     <h3 className="mt-6 text-xl font-semibold text-white">{feature.title}</h3>
@@ -627,8 +627,8 @@ export function ExplanationPage() {
               description="The value is not a single feature. It is the fact that generation, QA, fixes, and release actions stay connected."
               align="left"
             />
-            <div className="mt-8 overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-950/60">
-              <div className="grid grid-cols-[1.1fr_0.9fr_1fr] border-b border-white/10 bg-white/5 text-xs uppercase tracking-[0.22em] text-slate-400">
+            <div className="surface-panel-strong mt-8 overflow-hidden rounded-[1.75rem]">
+              <div className="grid grid-cols-[1.1fr_0.9fr_1fr] border-b border-white/10 bg-white/[0.03] text-xs uppercase tracking-[0.22em] text-slate-400">
                 <div className="px-4 py-4">Capability</div>
                 <div className="px-4 py-4">Traditional tools</div>
                 <div className="px-4 py-4 text-cyan-200">NaveenCodes AI Dev OS</div>
@@ -658,7 +658,7 @@ export function ExplanationPage() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.45, delay: index * 0.07 }}
-                  className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5"
+                  className={`${insetPanelClass}`}
                 >
                   <p className="text-lg font-semibold text-white">{useCase.title}</p>
                   <p className="mt-3 text-sm leading-7 text-slate-300">{useCase.copy}</p>
@@ -677,11 +677,11 @@ export function ExplanationPage() {
               align="left"
             />
             <div className="mt-8 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-950/80 p-5">
+              <div className={`${insetPanelStrongClass} relative overflow-hidden`}>
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-transparent to-violet-500/10" />
                 <div className="relative flex h-full min-h-72 flex-col justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-cyan-100">
+                      <div className="eyebrow-pill flex h-11 w-11 items-center justify-center rounded-2xl text-cyan-100">
                       <Play className="size-5" />
                     </div>
                     <div>
@@ -698,14 +698,14 @@ export function ExplanationPage() {
                 </div>
               </div>
 
-              <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5">
+              <div className={insetPanelClass}>
                 <p className="text-sm uppercase tracking-[0.2em] text-slate-400">Interactive preview</p>
                 <div className="mt-5 space-y-4">
-                  <div className="rounded-[1.25rem] border border-white/10 bg-slate-950/70 p-4">
+                  <div className={`${insetPanelStrongClass} rounded-[1.25rem] p-4`}>
                     <p className="text-sm text-slate-400">Current task</p>
                     <p className="mt-2 text-lg font-semibold text-white">Test checkout and prepare release notes</p>
                   </div>
-                  <div className="rounded-[1.25rem] border border-white/10 bg-slate-950/70 p-4">
+                  <div className={`${insetPanelStrongClass} rounded-[1.25rem] p-4`}>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-slate-300">Console</span>
                       <span className="text-emerald-300">0 critical</span>
@@ -714,7 +714,7 @@ export function ExplanationPage() {
                       checkout.spec.ts passed in 14.2s
                     </div>
                   </div>
-                  <div className="rounded-[1.25rem] border border-white/10 bg-slate-950/70 p-4">
+                  <div className={`${insetPanelStrongClass} rounded-[1.25rem] p-4`}>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-slate-300">Deploy preview</span>
                       <span className="text-cyan-200">Ready</span>
@@ -744,7 +744,7 @@ export function ExplanationPage() {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.45, delay: index * 0.06 }}
-                    className="flex items-center justify-between rounded-[1.25rem] border border-white/10 bg-white/5 px-4 py-4"
+                    className="surface-panel flex items-center justify-between rounded-[1.25rem] px-4 py-4"
                   >
                     <div className="flex items-center gap-3">
                       <Bot className="size-4 text-cyan-200" />
@@ -764,7 +764,7 @@ export function ExplanationPage() {
                 align="left"
               />
               <div className="mt-8 grid gap-4 md:grid-cols-2">
-                <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/70 p-5">
+                <div className={insetPanelStrongClass}>
                   <p className="text-xs uppercase tracking-[0.22em] text-slate-400">Analytics</p>
                   <div className="mt-5 flex h-32 items-end gap-3">
                     {[28, 34, 52, 48, 63, 76].map((value) => (
@@ -776,11 +776,11 @@ export function ExplanationPage() {
                     ))}
                   </div>
                 </div>
-                <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/70 p-5">
+                <div className={insetPanelStrongClass}>
                   <p className="text-xs uppercase tracking-[0.22em] text-slate-400">Live report</p>
                   <div className="mt-5 space-y-3 text-sm text-slate-200">
                     {["SEO score: 97", "Console regressions: none", "Deployment health: stable"].map((line) => (
-                      <div key={line} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                      <div key={line} className="surface-panel rounded-2xl px-4 py-3">
                         {line}
                       </div>
                     ))}
@@ -802,7 +802,7 @@ export function ExplanationPage() {
               <p className="text-sm uppercase tracking-[0.22em] text-slate-400">By the numbers</p>
               <div className="mt-8 grid gap-4 sm:grid-cols-3 xl:grid-cols-1">
                 {trustStats.map((stat) => (
-                  <div key={stat.label} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
+                  <div key={stat.label} className={`${insetPanelClass}`}>
                     <p className="text-sm uppercase tracking-[0.22em] text-slate-400">{stat.label}</p>
                     <p className="mt-3 text-4xl font-semibold text-white">{stat.value}</p>
                   </div>
@@ -847,10 +847,10 @@ export function ExplanationPage() {
                 transition={{ duration: 0.5, delay: index * 0.08 }}
               >
                 <GlassCard
-                  className={`relative h-full p-6 sm:p-8 ${plan.highlighted ? "border-cyan-300/30 bg-cyan-300/10 shadow-[0_26px_70px_rgba(59,130,246,0.18)]" : ""}`}
+                  className={`relative h-full p-6 sm:p-8 ${plan.highlighted ? "border-cyan-300/24 bg-[linear-gradient(180deg,rgba(34,211,238,0.08),rgba(8,15,29,0.84))] shadow-[0_26px_70px_rgba(59,130,246,0.16)]" : ""}`}
                 >
                   {plan.highlighted ? (
-                    <span className="absolute right-6 top-6 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-slate-950">
+                    <span className="primary-cta absolute right-6 top-6 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em]">
                       Most Popular
                     </span>
                   ) : null}
@@ -870,7 +870,7 @@ export function ExplanationPage() {
                   </div>
                   <Link
                     href="/dashboard"
-                    className={`mt-8 inline-flex w-full items-center justify-center rounded-2xl px-4 py-4 text-sm font-semibold transition ${plan.highlighted ? "bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 text-slate-950 hover:-translate-y-0.5" : "border border-white/10 bg-white/5 text-white hover:bg-white/10"}`}
+                    className={`${plan.highlighted ? primaryButtonClass : secondaryButtonClass} mt-8 w-full`}
                   >
                     {plan.name === "Enterprise" ? "Talk to sales" : "Start now"}
                   </Link>
@@ -890,8 +890,8 @@ export function ExplanationPage() {
             />
             <div className="mt-8 space-y-4">
               {howToUse.map((item, index) => (
-                <div key={item} className="flex gap-4 rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400/20 via-blue-500/20 to-violet-500/20 text-sm font-semibold text-cyan-100">
+                <div key={item} className="surface-panel flex gap-4 rounded-[1.5rem] p-4">
+                  <div className="eyebrow-pill flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-sm font-semibold text-cyan-100">
                     {index + 1}
                   </div>
                   <p className="text-sm leading-7 text-slate-300">{item}</p>
@@ -915,7 +915,7 @@ export function ExplanationPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.25 }}
                   transition={{ duration: 0.5, delay: index * 0.06 }}
-                  className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5"
+                  className="surface-panel rounded-[1.5rem] p-5"
                 >
                   <p className="text-lg font-semibold text-white">{faq.question}</p>
                   <p className="mt-3 text-sm leading-7 text-slate-300">{faq.answer}</p>
@@ -926,11 +926,11 @@ export function ExplanationPage() {
         </motion.section>
 
         <motion.section {...fadeUp()} className="pb-8">
-          <div className="relative overflow-hidden rounded-[2rem] border border-cyan-300/20 bg-slate-950/85 px-6 py-10 shadow-[0_24px_90px_rgba(17,24,39,0.5)] sm:px-10 sm:py-12">
+          <div className="surface-panel-strong relative overflow-hidden rounded-[2rem] px-6 py-10 sm:px-10 sm:py-12">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(139,92,246,0.18),transparent_26%)]" />
             <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-3xl">
-                <p className="text-sm uppercase tracking-[0.28em] text-cyan-200">Final CTA</p>
+                <p className="text-sm uppercase tracking-[0.28em] text-cyan-100">Final CTA</p>
                 <h2 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl">
                   Start Building with AI Today
                 </h2>
@@ -939,17 +939,11 @@ export function ExplanationPage() {
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
-                <Link
-                  href="/dashboard"
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 px-6 py-4 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-cyan-500/30"
-                >
+                <Link href="/dashboard" className={primaryButtonClass}>
                   Start Free
                   <ArrowRight className="size-4" />
                 </Link>
-                <Link
-                  href="/autonomous"
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/12 bg-white/5 px-6 py-4 text-sm font-semibold text-white transition hover:border-cyan-300/40 hover:bg-white/10"
-                >
+                <Link href="/autonomous" className={secondaryButtonClass}>
                   See Autonomous Mode
                   <Workflow className="size-4" />
                 </Link>

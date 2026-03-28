@@ -249,7 +249,7 @@ async function ensureChromeRuntime(config: ChromeRuntimeConfig, logger?: McpLogg
     "--disable-dev-shm-usage",
     "--disable-gpu",
     "--no-sandbox",
-    ...(config.headless === false ? [] : ["--headless=new"]),
+    ...(config.headless === false ? [] : ["--headless"]),
     ...(config.chromeArgs ?? []),
     "about:blank"
   ];

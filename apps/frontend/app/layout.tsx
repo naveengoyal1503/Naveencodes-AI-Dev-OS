@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
-import { Manrope, Space_Grotesk } from "next/font/google";
 
 import { getTranslationBundles } from "@naveencodes/ai";
 
@@ -9,18 +8,6 @@ import { ThemeProvider } from "../components/theme/theme-provider";
 import { siteConfig } from "../lib/site";
 
 import "./globals.css";
-
-const bodyFont = Manrope({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap"
-});
-
-const displayFont = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap"
-});
 
 export const metadata: Metadata = {
   title: {
@@ -35,7 +22,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${bodyFont.variable} ${displayFont.variable}`}>
+      <body>
         <ThemeProvider>
           <LocaleProvider bundles={bundles}>{children}</LocaleProvider>
         </ThemeProvider>

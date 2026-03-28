@@ -49,6 +49,13 @@ PY
 
 CHROME_BIN="$(find "${CHROME_DIR}" -type f -path '*chrome-linux64/chrome' | head -n 1)"
 chmod +x "${CHROME_BIN}"
+find "${CHROME_DIR}" -type f \( \
+  -name 'chrome_crashpad_handler' -o \
+  -name 'chrome-wrapper' -o \
+  -name 'xdg-mime' -o \
+  -name 'xdg-settings' -o \
+  -name 'chrome_sandbox' \
+\) -exec chmod +x {} +
 
 echo "Chrome installed at: ${CHROME_BIN}"
 echo "Set CHROME_EXECUTABLE_PATH=${CHROME_BIN}"

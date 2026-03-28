@@ -13,5 +13,6 @@ apps/backend/logs
 coverage
 *.log
 apps/frontend/.next
+apps/frontend/out
 apps/backend/dist
 packages/*/dist

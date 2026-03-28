@@ -3,6 +3,10 @@ node_modules
 dist
 build
 .turbo
+.codex-run
+.runtime
+logs
+apps/backend/logs
 .env
 .env.local
 .env.*.local

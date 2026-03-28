@@ -2,11 +2,20 @@ import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 
 import { createQaAudit, interpretCommand } from "@naveencodes/ai";
+import { createChromeDevtoolsConnection } from "@naveencodes/mcp";
+
+import { writeRuntimeLog } from "../../infrastructure/runtime-log.js";
 
 const commandSchema = z.object({
   command: z.string().min(3),
   url: z.string().url().optional()
 });
+
+function getProcessEnvRecord() {
+  return Object.fromEntries(
+    Object.entries(process.env).filter((entry): entry is [string, string] => typeof entry[1] === "string")
+  );
+}
 
 function chooseWorkflow(command: string): { workflow: string; title: string } {
   const normalized = command.toLowerCase();
@@ -162,16 +171,152 @@ function chooseWorkflow(command: string): { workflow: string; title: string } {
   return { workflow: "qa_autofix_loop", title: "Full QA auto-fix loop triggered" };
 }
 
+function commandNeedsBrowserExecution(command: string) {
+  const normalized = command.toLowerCase();
+
+  return [
+    "analyze",
+    "audit",
+    "browser",
+    "seo",
+    "performance",
+    "ui",
+    "checkout",
+    "console",
+    "network",
+    "fix",
+    "test"
+  ].some((keyword) => normalized.includes(keyword));
+}
+
+function buildConnection(app: FastifyInstance) {
+  return createChromeDevtoolsConnection({
+    browserUrl: app.config.MCP_BROWSER_URL,
+    command: app.config.MCP_SERVER_COMMAND,
+    args: app.config.MCP_SERVER_ARGS.split(",").filter(Boolean),
+    chromeExecutablePath: app.config.CHROME_EXECUTABLE_PATH,
+    remoteDebuggingPort: app.config.CHROME_REMOTE_DEBUGGING_PORT,
+    headless: app.config.CHROME_HEADLESS,
+    userDataDir: app.config.CHROME_USER_DATA_DIR,
+    startupTimeoutMs: app.config.CHROME_STARTUP_TIMEOUT_MS,
+    maxConcurrentSessions: app.config.QA_MAX_PARALLEL_SESSIONS,
+    chromeArgs: app.config.CHROME_EXTRA_ARGS.split(",").filter(Boolean),
+    env: getProcessEnvRecord()
+  });
+}
+
 export async function registerChatRoutes(app: FastifyInstance) {
-  app.post("/api/chat/command", async (request) => {
+  app.post("/api/chat/command", async (request, reply) => {
     const payload = commandSchema.parse(request.body);
     const intent = interpretCommand(payload.command);
     const targetUrl = payload.url ?? app.config.QA_DEFAULT_TARGET_URL;
-    const audit = createQaAudit({
+    const workflow = chooseWorkflow(payload.command);
+    let audit = createQaAudit({
       url: targetUrl,
+      consoleMessages: [],
+      networkRequests: [],
+      dom: {
+        title: undefined,
+        metaDescription: undefined,
+        canonical: undefined,
+        h1Count: 0,
+        headingOrderValid: true,
+        missingAltCount: 0,
+        layoutIssues: [],
+        duplicateElements: [],
+        missingSeoElements: []
+      },
+      images: [],
+      performance: {
+        lcpMs: 0,
+        cls: 0,
+        ttfbMs: 0,
+        totalRequests: 0,
+        renderBlockingResources: 0,
+        largeAssets: 0,
+        score: 100
+      },
       loadTestUsers: app.config.QA_LOAD_TEST_USERS
     });
-    const workflow = chooseWorkflow(payload.command);
+
+    await writeRuntimeLog({
+      type: "user_command",
+      message: "User command received",
+      context: {
+        command: payload.command,
+        targetUrl
+      }
+    });
+
+    if (commandNeedsBrowserExecution(payload.command)) {
+      try {
+        const artifacts = await buildConnection(app).collectAuditArtifacts(targetUrl, {
+          info: (context, message) => app.log.info(context, message),
+          warn: (context, message) => app.log.warn(context, message),
+          error: (context, message) => app.log.error(context, message)
+        });
+
+        audit = createQaAudit({
+          url: artifacts.finalUrl,
+          consoleMessages: artifacts.consoleMessages.map((message) => message.details ?? message.summary),
+          networkRequests: artifacts.networkRequests.map((request) => ({
+            url: request.url,
+            method: request.method,
+            status: request.status,
+            latencyMs: request.latencyMs,
+            sizeKb: request.sizeKb,
+            responsePreview: request.responsePreview
+          })),
+          dom: {
+            title: artifacts.dom.title,
+            metaDescription: artifacts.dom.metaDescription,
+            canonical: artifacts.dom.canonical,
+            h1Count: artifacts.dom.h1Count,
+            headingOrderValid: artifacts.dom.headingOrderValid,
+            missingAltCount: artifacts.dom.missingAltCount,
+            layoutIssues: artifacts.dom.layoutIssues,
+            duplicateElements: artifacts.dom.duplicateElements,
+            missingSeoElements: artifacts.dom.missingSeoElements
+          },
+          images: artifacts.dom.images.map((image) => ({
+            src: image.src,
+            alt: image.alt,
+            status: image.status
+          })),
+          performance: {
+            lcpMs: artifacts.performance.lcpMs,
+            cls: artifacts.performance.cls,
+            ttfbMs: artifacts.performance.ttfbMs,
+            totalRequests: artifacts.performance.totalRequests,
+            renderBlockingResources: artifacts.performance.renderBlockingResources,
+            largeAssets: artifacts.performance.largeAssets,
+            score: artifacts.performance.score
+          },
+          loadTestUsers: app.config.QA_LOAD_TEST_USERS
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "Browser runtime unavailable";
+        app.log.error({ error, targetUrl, command: payload.command }, "Chat command browser execution failed");
+        await writeRuntimeLog({
+          type: "error",
+          message: "Chat command browser execution failed",
+          context: {
+            command: payload.command,
+            targetUrl,
+            error: message
+          }
+        });
+
+        reply.code(503);
+        return {
+          command: payload.command,
+          workflow,
+          intent,
+          error: "browser_runtime_unavailable",
+          message
+        };
+      }
+    }
 
     return {
       command: payload.command,

@@ -5,6 +5,7 @@ import staticSite from "@fastify/static";
 import { existsSync, statSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { createChromeDevtoolsConnection } from "@naveencodes/mcp";
 
 import { getEnv } from "./config/env.js";
 import { createDatabasePool, createRedisClient } from "./infrastructure/db.js";
@@ -27,6 +28,12 @@ declare module "fastify" {
   interface FastifyInstance {
     config: ReturnType<typeof getEnv>;
   }
+}
+
+function getProcessEnvRecord() {
+  return Object.fromEntries(
+    Object.entries(process.env).filter((entry): entry is [string, string] => typeof entry[1] === "string")
+  );
 }
 
 function normalizeStaticPath(root: string, requestedPath: string) {
@@ -150,7 +157,20 @@ export async function buildServer() {
       websocket: "enabled",
       qa: "enabled",
       rateLimit: "enabled"
-    }
+    },
+    browser: await createChromeDevtoolsConnection({
+      browserUrl: env.MCP_BROWSER_URL,
+      command: env.MCP_SERVER_COMMAND,
+      args: env.MCP_SERVER_ARGS.split(",").filter(Boolean),
+      chromeExecutablePath: env.CHROME_EXECUTABLE_PATH,
+      remoteDebuggingPort: env.CHROME_REMOTE_DEBUGGING_PORT,
+      headless: env.CHROME_HEADLESS,
+      userDataDir: env.CHROME_USER_DATA_DIR,
+      startupTimeoutMs: env.CHROME_STARTUP_TIMEOUT_MS,
+      maxConcurrentSessions: env.QA_MAX_PARALLEL_SESSIONS,
+      chromeArgs: env.CHROME_EXTRA_ARGS.split(",").filter(Boolean),
+      env: getProcessEnvRecord()
+    }).getHealth(app.log)
   }));
 
   return app;

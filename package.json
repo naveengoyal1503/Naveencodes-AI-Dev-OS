@@ -21,7 +21,14 @@
     "release": "node ./bin/naveencodes-ai.js release",
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspace @naveencodes/core && npm run typecheck --workspace @naveencodes/ai && npm run typecheck --workspace @naveencodes/mcp && npm run typecheck --workspace @naveencodes/reports && npm run typecheck --workspace @naveencodes/auth && npm run typecheck --workspace @naveencodes/backend && npm run typecheck --workspace @naveencodes/frontend",
-    "init": "node ./bin/naveencodes-ai.js init"
+    "init": "node ./bin/naveencodes-ai.js init",
+    "pm2:start": "pm2 start ecosystem.config.cjs --env production",
+    "pm2:restart": "pm2 restart ecosystem.config.cjs --env production",
+    "pm2:logs": "pm2 logs naveencodes-ai-backend"
+  },
+  "dependencies": {
+    "chrome-devtools-mcp": "^0.20.3",
+    "pm2": "^5.4.3"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",

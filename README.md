@@ -92,7 +92,7 @@ bin/
 - Voice command support in the AI chat panel using browser speech recognition
 - Auto product builder flow for generating deployable blueprints from product prompts
 - Production-ready environment expansion covering domains, repo linkage, payment provider, and alert webhooks
-- Final docs in `docs/SETUP.md`, `docs/API.md`, and `docs/CLI.md`
+- Final docs in `docs/SETUP.md`, `docs/API.md`, `docs/CLI.md`, and `docs/MASTER_SYSTEM.md`
 
 ## Added In Part 7
 
@@ -255,6 +255,7 @@ Part 1 includes the base package that describes the Chrome DevTools MCP command 
 - `docs/SETUP.md`
 - `docs/API.md`
 - `docs/CLI.md`
+- `docs/MASTER_SYSTEM.md`
 
 ## Next Prompt Parts
 

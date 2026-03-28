@@ -1,8 +1,19 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 
-import { createAccessToken, hashPassword, verifyAccessToken, verifyPassword } from "@naveencodes/auth";
-import type { UserRole } from "@naveencodes/core";
+import { createAccessToken, hashPassword, verifyPassword } from "@naveencodes/auth";
+
+import { requireAuthenticatedUser } from "../../infrastructure/auth-context.js";
+import {
+  createActivityLog,
+  createUser,
+  findUserByEmail,
+  findUserById,
+  getUserApiKey,
+  listActivityLogsByUser,
+  upsertUserApiKey
+} from "../../infrastructure/repositories.js";
+import { encryptSecret } from "../../infrastructure/secrets.js";
 
 const registerSchema = z.object({
   fullName: z.string().min(2),
@@ -16,59 +27,62 @@ const loginSchema = z.object({
   password: z.string().min(8)
 });
 
-interface StoredUser {
-  id: string;
-  fullName: string;
-  email: string;
-  passwordHash: string;
-  role: UserRole;
-}
+const apiKeySchema = z.object({
+  provider: z.enum(["openai"]).default("openai"),
+  apiKey: z.string().min(20)
+});
 
-const users = new Map<string, StoredUser>();
-
-function readBearerToken(header?: string): string | null {
-  if (!header) {
+function buildUserResponse(user: Awaited<ReturnType<typeof findUserById>>) {
+  if (!user) {
     return null;
   }
 
-  const [scheme, token] = header.split(" ");
-  if (scheme?.toLowerCase() !== "bearer" || !token) {
-    return null;
-  }
-
-  return token;
+  return {
+    id: user.id,
+    email: user.email,
+    fullName: user.fullName,
+    role: user.role
+  };
 }
 
 export async function registerAuthRoutes(app: FastifyInstance) {
   app.post("/api/auth/register", async (request, reply) => {
     const payload = registerSchema.parse(request.body);
-    const existing = users.get(payload.email.toLowerCase());
+    const email = payload.email.toLowerCase();
+    const existing = await findUserByEmail(app.db, email);
 
     if (existing) {
       return reply.status(409).send({ message: "User already exists" });
     }
 
-    const user: StoredUser = {
+    const user = await createUser(app.db, {
       id: crypto.randomUUID(),
-      email: payload.email.toLowerCase(),
+      email,
       fullName: payload.fullName,
       passwordHash: await hashPassword(payload.password),
       role: payload.role
-    };
-
-    users.set(user.email, user);
-
-    return reply.status(201).send({
-      id: user.id,
-      email: user.email,
-      fullName: user.fullName,
-      role: user.role
     });
+
+    if (!user) {
+      return reply.status(500).send({ message: "Unable to create user" });
+    }
+
+    await createActivityLog(app.db, {
+      id: crypto.randomUUID(),
+      userId: user.id,
+      type: "auth.register",
+      title: "Workspace account created",
+      status: "completed",
+      metadataJson: JSON.stringify({ email: user.email })
+    });
+
+    return reply.status(201).send(buildUserResponse(user));
   });
 
   app.post("/api/auth/login", async (request, reply) => {
     const payload = loginSchema.parse(request.body);
-    const user = users.get(payload.email.toLowerCase());
+    const email = payload.email.toLowerCase();
+    const user = await findUserByEmail(app.db, email);
 
     if (!user) {
       return reply.status(401).send({ message: "Invalid credentials" });
@@ -79,6 +93,14 @@ export async function registerAuthRoutes(app: FastifyInstance) {
       return reply.status(401).send({ message: "Invalid credentials" });
     }
 
+    await createActivityLog(app.db, {
+      id: crypto.randomUUID(),
+      userId: user.id,
+      type: "auth.login",
+      title: "User logged in",
+      status: "completed"
+    });
+
     return {
       accessToken: createAccessToken(
         {
@@ -88,81 +110,90 @@ export async function registerAuthRoutes(app: FastifyInstance) {
         },
         app.config.JWT_SECRET
       ),
-      user: {
-        id: user.id,
-        email: user.email,
-        fullName: user.fullName,
-        role: user.role
-      }
+      user: buildUserResponse(user)
     };
   });
 
   app.get("/api/auth/me", async (request, reply) => {
-    const token = readBearerToken(request.headers.authorization);
-
-    if (!token) {
-      return reply.status(401).send({ message: "Missing bearer token" });
+    const session = requireAuthenticatedUser(app, request, reply);
+    if (!session) {
+      return;
     }
 
-    try {
-      const payload = verifyAccessToken(token, app.config.JWT_SECRET);
-      const user = Array.from(users.values()).find((item) => item.id === payload.sub);
-
-      if (!user) {
-        return reply.status(404).send({ message: "User not found" });
-      }
-
-      return {
-        user: {
-          id: user.id,
-          email: user.email,
-          fullName: user.fullName,
-          role: user.role
-        }
-      };
-    } catch {
-      return reply.status(401).send({ message: "Invalid token" });
+    const user = await findUserById(app.db, session.id);
+    if (!user) {
+      return reply.status(404).send({ message: "User not found" });
     }
+
+    return {
+      user: buildUserResponse(user)
+    };
   });
 
   app.get("/api/auth/history", async (request, reply) => {
-    const token = readBearerToken(request.headers.authorization);
-
-    if (!token) {
-      return reply.status(401).send({ message: "Missing bearer token" });
+    const session = requireAuthenticatedUser(app, request, reply);
+    if (!session) {
+      return;
     }
 
-    try {
-      const payload = verifyAccessToken(token, app.config.JWT_SECRET);
+    const items = await listActivityLogsByUser(app.db, session.id);
 
-      return {
-        userId: payload.sub,
-        items: [
-          {
-            id: crypto.randomUUID(),
-            type: "seo-scan",
-            title: "Homepage SEO audit completed",
-            createdAt: "2026-03-27T09:15:00.000Z",
-            status: "completed"
-          },
-          {
-            id: crypto.randomUUID(),
-            type: "performance-run",
-            title: "Performance sweep completed for staging",
-            createdAt: "2026-03-26T18:45:00.000Z",
-            status: "completed"
-          },
-          {
-            id: crypto.randomUUID(),
-            type: "ui-fix-loop",
-            title: "UI overflow issue fixed and retested",
-            createdAt: "2026-03-25T14:20:00.000Z",
-            status: "resolved"
-          }
-        ]
-      };
-    } catch {
-      return reply.status(401).send({ message: "Invalid token" });
+    return {
+      userId: session.id,
+      items: items.map((item) => ({
+        id: item.id,
+        type: item.type,
+        title: item.title,
+        createdAt: item.createdAt,
+        status: item.status,
+        metadata: item.metadataJson ? JSON.parse(item.metadataJson) : null
+      }))
+    };
+  });
+
+  app.get("/api/auth/api-key", async (request, reply) => {
+    const session = requireAuthenticatedUser(app, request, reply);
+    if (!session) {
+      return;
     }
+
+    const storedKey = await getUserApiKey(app.db, session.id, app.config.AI_PROVIDER);
+
+    return {
+      provider: app.config.AI_PROVIDER,
+      configured: Boolean(storedKey),
+      keyHint: storedKey?.keyHint ?? null,
+      updatedAt: storedKey?.updatedAt ?? null
+    };
+  });
+
+  app.put("/api/auth/api-key", async (request, reply) => {
+    const session = requireAuthenticatedUser(app, request, reply);
+    if (!session) {
+      return;
+    }
+
+    const payload = apiKeySchema.parse(request.body);
+    const encrypted = encryptSecret(payload.apiKey, app.config.ENCRYPTION_SECRET);
+
+    await upsertUserApiKey(app.db, {
+      userId: session.id,
+      provider: payload.provider,
+      encryptedKey: encrypted.encryptedKey,
+      iv: encrypted.iv,
+      authTag: encrypted.authTag,
+      keyHint: encrypted.keyHint
+    });
+
+    await createActivityLog(app.db, {
+      id: crypto.randomUUID(),
+      userId: session.id,
+      type: "auth.api_key",
+      title: `${payload.provider} API key updated`,
+      status: "completed",
+      metadataJson: JSON.stringify({ provider: payload.provider, keyHint: encrypted.keyHint })
+    });
+
+    return reply.status(204).send();
   });
 }

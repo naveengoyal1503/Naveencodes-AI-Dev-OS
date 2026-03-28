@@ -1,6 +1,7 @@
 import { AppShell } from "../../components/shell/app-shell";
 import { BillingCenter } from "../../components/ops/billing-center";
 import { PluginMarketplace } from "../../components/ops/plugin-marketplace";
+import { ApiAccessPanel } from "../../components/settings/api-access-panel";
 import { SurfaceCard } from "../../components/ui/card";
 
 const rows = [
@@ -61,6 +62,7 @@ export default function SettingsPage() {
       </section>
 
       <div className="mt-4 space-y-4">
+        <ApiAccessPanel />
         <BillingCenter />
         <PluginMarketplace />
         <SurfaceCard title="Production security" description="Rate limits, environment variables, and secret management posture.">

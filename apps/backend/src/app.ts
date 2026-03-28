@@ -5,11 +5,14 @@ import staticSite from "@fastify/static";
 import { existsSync, statSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import type { Redis } from "ioredis";
+import type { Pool } from "mysql2/promise";
 import { createChromeDevtoolsConnection } from "@naveencodes/mcp";
 
 import { getEnv } from "./config/env.js";
-import { createDatabasePool, createRedisClient } from "./infrastructure/db.js";
+import { createDatabasePool, createRedisClient, ensureDatabaseSchema } from "./infrastructure/db.js";
 import { registerAnalyticsRoutes } from "./modules/analytics/analytics.routes.js";
+import { registerAnalyzeRoutes } from "./modules/analyze/analyze.routes.js";
 import { registerAuthRoutes } from "./modules/auth/auth.routes.js";
 import { registerAiRoutes } from "./modules/ai/ai.routes.js";
 import { registerBillingRoutes } from "./modules/billing/billing.routes.js";
@@ -27,6 +30,8 @@ import { registerWebsocket } from "./plugins/websocket.js";
 declare module "fastify" {
   interface FastifyInstance {
     config: ReturnType<typeof getEnv>;
+    db: Pool;
+    redis: Redis;
   }
 }
 
@@ -64,6 +69,10 @@ export async function buildServer() {
 
   const pool = createDatabasePool(env);
   const redis = createRedisClient(env);
+  await ensureDatabaseSchema(pool);
+
+  app.decorate("db", pool);
+  app.decorate("redis", redis);
 
   app.addHook("onClose", async () => {
     await pool.end();
@@ -73,7 +82,10 @@ export async function buildServer() {
   });
 
   await app.register(cors, {
-    origin: [env.APP_URL]
+    origin: env.CORS_ALLOWED_ORIGINS.split(",")
+      .map((value) => value.trim())
+      .filter(Boolean),
+    credentials: true
   });
 
   await app.register(rateLimit, {
@@ -95,6 +107,7 @@ export async function buildServer() {
   await registerReportRoutes(app);
   await registerAiRoutes(app);
   await registerChatRoutes(app);
+  await registerAnalyzeRoutes(app);
   await registerQaRoutes(app);
 
   if (env.SERVE_FRONTEND_STATIC) {
@@ -152,7 +165,7 @@ export async function buildServer() {
     status: "ok",
     services: {
       api: "ready",
-      postgres: "configured",
+      mysql: "configured",
       redis: "configured",
       websocket: "enabled",
       qa: "enabled",

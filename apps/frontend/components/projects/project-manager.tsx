@@ -3,13 +3,11 @@
 import { useEffect, useState, useTransition } from "react";
 import { Globe2, Plus } from "lucide-react";
 
-import { getApiBaseUrl } from "../../lib/api";
+import { buildApiUrl, buildJsonHeaders } from "../../lib/api";
 import { AppButton } from "../ui/button";
 import { SurfaceCard } from "../ui/card";
 import { FieldShell, TextInput } from "../ui/form-field";
 import { Modal } from "../ui/modal";
-
-const endpoint = getApiBaseUrl();
 
 interface ProjectItem {
   id: string;
@@ -31,10 +29,19 @@ export function ProjectManager() {
   const [isPending, startTransition] = useTransition();
 
   const loadProjects = () => {
-    fetch(`${endpoint}/api/projects`)
-      .then((response) => response.json())
+    fetch(buildApiUrl("/api/projects"), {
+      headers: buildJsonHeaders(true)
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          const failure = (await response.json().catch(() => null)) as { message?: string } | null;
+          throw new Error(failure?.message ?? `Request failed with ${response.status}`);
+        }
+
+        return response.json() as Promise<{ items: ProjectItem[] }>;
+      })
       .then((payload: { items: ProjectItem[] }) => setProjects(payload.items))
-      .catch(() => setError("Unable to load projects"));
+      .catch((issue) => setError(issue instanceof Error ? issue.message : "Unable to load projects"));
   };
 
   useEffect(() => {
@@ -45,11 +52,9 @@ export function ProjectManager() {
     startTransition(async () => {
       try {
         setError(null);
-        const response = await fetch(`${endpoint}/api/projects`, {
+        const response = await fetch(buildApiUrl("/api/projects"), {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: buildJsonHeaders(true),
           body: JSON.stringify({
             name,
             targetUrl,
@@ -58,7 +63,8 @@ export function ProjectManager() {
         });
 
         if (!response.ok) {
-          throw new Error(`Request failed with ${response.status}`);
+          const failure = (await response.json().catch(() => null)) as { message?: string } | null;
+          throw new Error(failure?.message ?? `Request failed with ${response.status}`);
         }
 
         setOpen(false);

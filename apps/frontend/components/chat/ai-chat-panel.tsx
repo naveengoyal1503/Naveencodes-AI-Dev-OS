@@ -4,11 +4,9 @@ import { useState, useTransition } from "react";
 import { Bot, Mic, SendHorizonal, Sparkles } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { getApiBaseUrl } from "../../lib/api";
+import { buildApiUrl, buildJsonHeaders } from "../../lib/api";
 import { AppButton } from "../ui/button";
 import { TextInput } from "../ui/form-field";
-
-const endpoint = getApiBaseUrl();
 const suggestions = [
   "fix UI issues",
   "improve SEO",
@@ -64,16 +62,15 @@ export function AIChatPanel() {
     startTransition(async () => {
       try {
         setError(null);
-        const response = await fetch(`${endpoint}/api/chat/command`, {
+        const response = await fetch(buildApiUrl("/api/chat"), {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: buildJsonHeaders(true),
           body: JSON.stringify({ command: payload })
         });
 
         if (!response.ok) {
-          throw new Error(`Request failed with ${response.status}`);
+          const failure = (await response.json().catch(() => null)) as { message?: string } | null;
+          throw new Error(failure?.message ?? `Request failed with ${response.status}`);
         }
 
         setResult((await response.json()) as ChatResponse);

@@ -1,35 +1,8 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 
-const seedProjects = [
-  {
-    id: crypto.randomUUID(),
-    name: "NaveenCodes.com",
-    status: "active",
-    targetUrl: "https://naveencodes.com",
-    environment: "production",
-    seoScore: 94,
-    performanceScore: 91
-  },
-  {
-    id: crypto.randomUUID(),
-    name: "Client Commerce QA",
-    status: "monitoring",
-    targetUrl: "https://shop-demo.naveencodes.com",
-    environment: "staging",
-    seoScore: 88,
-    performanceScore: 84
-  },
-  {
-    id: crypto.randomUUID(),
-    name: "Docs Portal",
-    status: "draft",
-    targetUrl: "https://docs-demo.naveencodes.com",
-    environment: "preview",
-    seoScore: 90,
-    performanceScore: 93
-  }
-];
+import { requireAuthenticatedUser } from "../../infrastructure/auth-context.js";
+import { createActivityLog, createProject, getActiveProject, listProjectsByUser } from "../../infrastructure/repositories.js";
 
 const createProjectSchema = z.object({
   name: z.string().min(2),
@@ -38,27 +11,63 @@ const createProjectSchema = z.object({
 });
 
 export async function registerProjectRoutes(app: FastifyInstance) {
-  app.get("/api/projects", async () => ({
-    items: seedProjects
-  }));
+  app.get("/api/projects", async (request, reply) => {
+    const session = requireAuthenticatedUser(app, request, reply);
+    if (!session) {
+      return;
+    }
+
+    const items = await listProjectsByUser(app.db, session.id);
+
+    return {
+      items
+    };
+  });
 
   app.post("/api/projects", async (request, reply) => {
+    const session = requireAuthenticatedUser(app, request, reply);
+    if (!session) {
+      return;
+    }
+
     const payload = createProjectSchema.parse(request.body);
-    const project = {
+    const project = await createProject(app.db, {
       id: crypto.randomUUID(),
+      userId: session.id,
       name: payload.name,
-      status: "active",
       targetUrl: payload.targetUrl,
       environment: payload.environment,
-      seoScore: 89,
-      performanceScore: 87
-    };
+      status: "active",
+      seoScore: 0,
+      performanceScore: 0
+    });
 
-    seedProjects.unshift(project);
+    if (!project) {
+      return reply.status(500).send({ message: "Unable to create project" });
+    }
+
+    await createActivityLog(app.db, {
+      id: crypto.randomUUID(),
+      userId: session.id,
+      type: "project.create",
+      title: `Project created: ${project.name}`,
+      status: "completed",
+      metadataJson: JSON.stringify({ projectId: project.id, targetUrl: project.targetUrl })
+    });
+
     return reply.status(201).send({ project });
   });
 
-  app.get("/api/projects/active", async () => ({
-    project: seedProjects[0]
-  }));
+  app.get("/api/projects/active", async (request, reply) => {
+    const session = requireAuthenticatedUser(app, request, reply);
+    if (!session) {
+      return;
+    }
+
+    const project = await getActiveProject(app.db, session.id);
+
+    return {
+      project
+    };
+  });
 }

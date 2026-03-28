@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { getApiBaseUrl } from "../../lib/api";
-
-const endpoint = getApiBaseUrl();
+import { buildApiUrl, buildJsonHeaders } from "../../lib/api";
 
 interface ProjectItem {
   id: string;
@@ -19,8 +17,16 @@ export function ProjectSwitcher() {
   useEffect(() => {
     let mounted = true;
 
-    fetch(`${endpoint}/api/projects`)
-      .then((response) => response.json())
+    fetch(buildApiUrl("/api/projects"), {
+      headers: buildJsonHeaders(true)
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`Request failed with ${response.status}`);
+        }
+
+        return response.json() as Promise<{ items: ProjectItem[] }>;
+      })
       .then((payload: { items: ProjectItem[] }) => {
         if (!mounted) {
           return;

@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
-import { getApiBaseUrl } from "../../lib/api";
+import { buildApiUrl, buildJsonHeaders } from "../../lib/api";
+import { clearStoredAccessToken, getStoredAccessToken, persistAccessToken } from "../../lib/session";
 import { AppButton } from "../ui/button";
 import { SurfaceCard } from "../ui/card";
 import { FieldShell, TextArea, TextInput } from "../ui/form-field";
 import { BillingCenter } from "../ops/billing-center";
-
-const endpoint = getApiBaseUrl();
 
 interface AuthUser {
   id: string;
@@ -38,12 +37,12 @@ export function ClientWorkspace() {
   const [isPending, startTransition] = useTransition();
 
   const hydrateWorkspace = async (accessToken: string) => {
-    const meResponse = await fetch(`${endpoint}/api/auth/me`, {
+    const meResponse = await fetch(buildApiUrl("/api/auth/me"), {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     });
-    const historyResponse = await fetch(`${endpoint}/api/auth/history`, {
+    const historyResponse = await fetch(buildApiUrl("/api/auth/history"), {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
@@ -60,16 +59,31 @@ export function ClientWorkspace() {
     setHistory(historyPayload.items);
   };
 
+  useEffect(() => {
+    const accessToken = getStoredAccessToken();
+
+    if (!accessToken) {
+      return;
+    }
+
+    setToken(accessToken);
+
+    hydrateWorkspace(accessToken).catch(() => {
+      clearStoredAccessToken();
+      setToken("");
+      setUser(null);
+      setHistory([]);
+    });
+  }, []);
+
   const submit = () => {
     startTransition(async () => {
       try {
         setError(null);
         if (mode === "register") {
-          const registerResponse = await fetch(`${endpoint}/api/auth/register`, {
+          const registerResponse = await fetch(buildApiUrl("/api/auth/register"), {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
+            headers: buildJsonHeaders(),
             body: JSON.stringify({
               fullName,
               email,
@@ -83,11 +97,9 @@ export function ClientWorkspace() {
           }
         }
 
-        const loginResponse = await fetch(`${endpoint}/api/auth/login`, {
+        const loginResponse = await fetch(buildApiUrl("/api/auth/login"), {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: buildJsonHeaders(),
           body: JSON.stringify({
             email,
             password
@@ -99,6 +111,7 @@ export function ClientWorkspace() {
         }
 
         const loginPayload = (await loginResponse.json()) as { accessToken: string; user: AuthUser };
+        persistAccessToken(loginPayload.accessToken);
         setToken(loginPayload.accessToken);
         setUser(loginPayload.user);
         await hydrateWorkspace(loginPayload.accessToken);
@@ -147,7 +160,7 @@ export function ClientWorkspace() {
             {mode === "login" ? "Login to workspace" : "Register and continue"}
           </AppButton>
           {error ? <p className="text-sm text-rose-600 dark:text-rose-300">{error}</p> : null}
-          {token ? <p className="text-xs text-slate-500 dark:text-slate-400">JWT issued and stored in memory for this session.</p> : null}
+          {token ? <p className="text-xs text-slate-500 dark:text-slate-400">JWT issued and stored in the browser for authenticated API requests.</p> : null}
         </div>
       </SurfaceCard>
 
